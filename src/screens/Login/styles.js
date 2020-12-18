@@ -130,7 +130,7 @@ export const Container = styled.form`
     border: 1px solid rgba(255, 255, 255, 0.2);
     text-align: center;
     border-radius: 24px;
-    height: 36px;
+    height: 40px;
     background: rgba(255, 255, 255, 0.1);
     color: white;
     outline: none;
