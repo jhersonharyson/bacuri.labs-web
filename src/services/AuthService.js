@@ -13,15 +13,19 @@ class AuthService {
     formData.append("username", username);
 
     const headers = {
-      Authorization: `Basic ${btoa(
-        environments.security_oauth2_client_clientId +
-          ":" +
-          environments.security_oauth2_client_clientSecret
-      )}`,
+      Authorization:
+        "Basic " +
+        btoa(
+          environments.security_oauth2_client_clientId +
+            ":" +
+            environments.security_oauth2_client_clientSecret
+        ),
       "Content-Type": "application/x-www-form-urlencoded"
     };
 
-    const response = await axios.post(URL.OAUTH_TOKEN, formData, { headers });
+    const response = await axios.post(this.URL.OAUTH_TOKEN, formData, {
+      headers
+    });
     console.log(response);
 
     return response;
