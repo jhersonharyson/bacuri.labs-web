@@ -1,17 +1,21 @@
 import axios from "axios";
 
-import { apikey, baseURL, ApiVersion, ApiDomain } from "../env.json";
+import environments from "../configurations/environments";
+import AuthService from "../services/AuthService";
 
 const http = axios.create({
-  baseURL: `${baseURL}/${ApiVersion}/${ApiDomain}`,
-  timeout: false,
-  params: {
-    apikey
-  }
+  baseURL: `${environments.host}`,
+  timeout: false
 });
 
 http.interceptors.request.use(
-  response => response,
+  response => {
+    const token = AuthService.getToken();
+    if (token) {
+      response.headers.Authorization = `Bearer ${token}`;
+    }
+    return response;
+  },
   error => {
     console.log(error.message);
     return error;

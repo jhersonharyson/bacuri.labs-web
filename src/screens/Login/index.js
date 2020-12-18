@@ -1,11 +1,19 @@
 import React, { useState } from "react";
 import { Container } from "./styles";
+import AuthService from "../../services/AuthService";
+
 const Login = () => {
   const [username, setUsername] = useState(null);
   const [password, setPassword] = useState(null);
 
+  const onSubmit = event => {
+    event.preventDefault();
+    event.stopPropagation();
+    AuthService.login(username, password);
+  };
+
   return (
-    <Container className="login-card">
+    <Container className="login-card" onSubmit={onSubmit}>
       <div className="login-card-content">
         <div className="header">
           <div className="logo">

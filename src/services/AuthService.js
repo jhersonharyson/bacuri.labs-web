@@ -1,18 +1,39 @@
 import axios from "../http";
+import environments from "../configurations/environments";
 
-export default class AuthService {
+class AuthService {
   URL = {
-    OAUTH_TOKEN: "oauth/token",
-    COMICS: "comics",
+    OAUTH_TOKEN: "/oauth/token"
   };
 
-  login(username, password) {
-    return axios.get(resourceUrl);
+  async login(username, password) {
+    const formData = new URLSearchParams();
+    formData.append("grant_type", environments.security_oauth2_client_scope);
+    formData.append("password", password);
+    formData.append("username", username);
+
+    const headers = {
+      Authorization: `Basic ${btoa(username + ":" + password)}`,
+      "Content-Type": "application/x-www-form-urlencoded"
+    };
+
+    const response = await axios.post(URL.OAUTH_TOKEN, formData, { headers });
+    console.log(response);
+
+    return response;
   }
 
   logout() {
     return axios.get(
-      `${this.URL.COMICS}?titleStartsWith=${title}&offset=${offset}&limit=${limit}`
+      `${
+        this.URL.COMICS
+      }?titleStartsWith=${title}&offset=${offset}&limit=${limit}`
     );
   }
+
+  getToken() {
+    return localStorage.getItem("token");
+  }
 }
+
+export default new AuthService();
