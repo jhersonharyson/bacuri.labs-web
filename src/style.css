@@ -1,0 +1,19 @@
+h1,
+p {
+  font-family: Lato;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  display: flex;
+}
+
+html {
+  height: 100%;
+}
+
+#root {
+  flex: 1;
+}
