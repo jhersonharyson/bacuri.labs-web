@@ -2,6 +2,8 @@ import axios from "../http";
 import environments from "../configurations/environments";
 
 class AuthService {
+  user = null;
+
   URL = {
     OAUTH_TOKEN: "/oauth/token"
   };
