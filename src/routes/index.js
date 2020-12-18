@@ -5,12 +5,14 @@ import PrivateRoute from "../components/PrivateRoute";
 import Login from "../screens/Login";
 import ApplyVaccine from "../screens/ApplyVaccine";
 import NotFound from "../screens/NotFound";
+import AuthService from "../services/AuthService";
 
 const Routes = () => {
   return (
     <Switch>
       <Route exact path="/">
-        <Redirect to="/sign-in" />
+        {!AuthService.isAuthenticated() && <Redirect to="/sign-in" />}
+        {AuthService.isAuthenticated() && <Redirect to="/apply" />}
       </Route>
       <PrivateRoute component={ApplyVaccine} exact path="/apply" />
       <Route component={Login} exact path="/sign-in" />

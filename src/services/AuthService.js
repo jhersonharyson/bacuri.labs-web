@@ -74,7 +74,7 @@ class AuthService {
   }
 
   isAuthenticated() {
-    return !!this.access_token;
+    return !!this.getAccessToken();
   }
 }
 

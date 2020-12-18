@@ -72,7 +72,7 @@ export const Container = styled.form`
     height: 40px;
     border: none;
     border-radius: 40px;
-    padding: 12px 0;
+    padding: 0;
     text-transform: uppercase;
     font-weight: bold;
     margin-bottom: 32px;

@@ -1,12 +1,18 @@
 import React from "react";
 import { Container } from "./styles.js";
 const ApplyVaccine = () => {
+  const onSubmit = event => {
+    event.preventDefault();
+    event.stopPropagation();
+  };
   return (
-    <>
-      <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <Container>
+      <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top p-0">
         <div class="container-fluid">
           <a class="navbar-brand" href="#">
-            ReeZh Design
+            <h4>
+              Bacuri<span className="highlight">Labs</span>
+            </h4>
           </a>
           <button
             class="navbar-toggler"
@@ -71,14 +77,14 @@ const ApplyVaccine = () => {
                 </ul>
               </li>
             </ul>
-            <form class="d-flex">
+            <form class="d-flex" onSubmit={onSubmit}>
               <input
-                class="form-control mr-2"
+                class="form-control mr-2 btn-sm"
                 type="search"
                 placeholder="Search"
                 aria-label="Search"
               />
-              <button class="btn btn-outline-success" type="submit">
+              <button class="btn btn-outline-success btn-sm" type="submit">
                 Search
               </button>
             </form>
@@ -98,13 +104,10 @@ const ApplyVaccine = () => {
       </main>
       <footer>
         <div class="container text-center">
-          <a href="https://reezhdesign.com" target="_blank" rel="noopener">
-            ReeZh Design
-          </a>{" "}
-          - Jasa Pembuatan Website
+          Designed with love by J. Haryson && D. Duarte
         </div>
       </footer>
-    </>
+    </Container>
   );
 };
 

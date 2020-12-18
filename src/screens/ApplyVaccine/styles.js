@@ -5,4 +5,8 @@ const $light_text = "#738297";
 const $dark_text = "#273142";
 const $light_bg = "#313d4f";
 
-export const Container = styled.div``;
+export const Container = styled.div`
+  h4 .highlight {
+    color: #fdc654;
+  }
+`;
