@@ -1,14 +1,58 @@
 import axios from "../http";
 import environments from "../configurations/environments";
+import UserService from "./UserService";
 
 class AuthService {
-  user = null;
+  access_token = null;
 
   URL = {
     OAUTH_TOKEN: "/oauth/token"
   };
 
   async login(username, password) {
+    const { formData, headers } = this.buildLoginParams(username, password);
+    const response = await axios.post(this.URL.OAUTH_TOKEN, formData, {
+      headers
+    });
+
+    console.log(response);
+
+    if (await processResponse(response)) {
+      location.assign("/home");
+    }
+  }
+
+  logout() {
+    return axios.get(
+      `${
+        this.URL.COMICS
+      }?titleStartsWith=${title}&offset=${offset}&limit=${limit}`
+    );
+  }
+
+  getAccessToken() {
+    return localStorage.getItem("access_token");
+  }
+
+  setAccessToken(access_token) {
+    return localStorage.setItem("access_token", access_token);
+  }
+
+  async processResponse(response) {
+    if (response.code == 200) {
+      this.access_token = response?.data?.access_token;
+      this.setAccessToken(this.access_token);
+      await this.getUser();
+      return true;
+    }
+    return false;
+  }
+
+  async getUser() {
+    await UserService.getInfo();
+  }
+
+  buildLoginParams(username, password) {
     const formData = new URLSearchParams();
     formData.append("grant_type", environments.security_oauth2_client_scope);
     formData.append("password", password);
@@ -25,24 +69,7 @@ class AuthService {
       "Content-Type": "application/x-www-form-urlencoded"
     };
 
-    const response = await axios.post(this.URL.OAUTH_TOKEN, formData, {
-      headers
-    });
-    console.log(response);
-
-    return response;
-  }
-
-  logout() {
-    return axios.get(
-      `${
-        this.URL.COMICS
-      }?titleStartsWith=${title}&offset=${offset}&limit=${limit}`
-    );
-  }
-
-  getToken() {
-    return localStorage.getItem("token");
+    return { formData, headers };
   }
 }
 
