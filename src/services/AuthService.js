@@ -13,7 +13,11 @@ class AuthService {
     formData.append("username", username);
 
     const headers = {
-      Authorization: `Basic ${btoa(username + ":" + password)}`,
+      Authorization: `Basic ${btoa(
+        environments.security_oauth2_client_clientId +
+          ":" +
+          environments.security_oauth2_client_clientSecret
+      )}`,
       "Content-Type": "application/x-www-form-urlencoded"
     };
 
