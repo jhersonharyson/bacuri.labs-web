@@ -62,7 +62,8 @@ export const Container = styled.form`
     }
   }
 
-  button {
+  button,
+  .loader-button {
     background: white;
     display: block;
     color: #fdc654;
@@ -82,6 +83,11 @@ export const Container = styled.form`
       background: #fdc654;
       color: #fff;
     }
+  }
+
+  .loader-button {
+    padding: 0;
+    padding-top: 8px;
   }
 
   .form-field {

@@ -17,8 +17,8 @@ class AuthService {
 
     console.log(response);
 
-    if (await processResponse(response)) {
-      location.assign("/home");
+    if (await this.proccessResponse(response)) {
+      location.href("/apply");
     }
   }
 
@@ -38,7 +38,7 @@ class AuthService {
     return localStorage.setItem("access_token", access_token);
   }
 
-  async processResponse(response) {
+  async proccessResponse(response) {
     if (response.code == 200) {
       this.access_token = response?.data?.access_token;
       this.setAccessToken(this.access_token);
@@ -70,6 +70,10 @@ class AuthService {
     };
 
     return { formData, headers };
+  }
+
+  isAuthenticated() {
+    return !!this.access_token;
   }
 }
 

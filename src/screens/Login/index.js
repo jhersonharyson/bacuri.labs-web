@@ -1,15 +1,18 @@
 import React, { useState } from "react";
 import { Container } from "./styles";
 import AuthService from "../../services/AuthService";
-
+import Loader from "../../components/Loader";
 const Login = () => {
-  const [username, setUsername] = useState(null);
-  const [password, setPassword] = useState(null);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const onSubmit = event => {
+  const onSubmit = async event => {
     event.preventDefault();
     event.stopPropagation();
-    AuthService.login(username, password);
+    setLoading(true);
+    await AuthService.login(username, password);
+    setLoading(false);
   };
 
   return (
@@ -48,7 +51,12 @@ const Login = () => {
             />
           </div>
 
-          <button type="submit">Login</button>
+          {!loading && <button type="submit">Login</button>}
+          {loading && (
+            <div className="loader-button">
+              <Loader />
+            </div>
+          )}
           <div>
             Don't have an account? <a href="">Sign Up Now</a>
           </div>

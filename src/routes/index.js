@@ -1,14 +1,22 @@
-// For this demo, we are using the UMD build of react-router-dom
-import { HashRouter, Switch, Route } from "react-router-dom";
+import React from "react";
+import { Switch, Redirect, Route } from "react-router-dom";
+import PrivateRoute from "../components/PrivateRoute";
 
-export default (Router = () => (
-  <main>
+import Login from "../screens/Login";
+import ApplyVaccine from "../screens/ApplyVaccine";
+import NotFound from "../screens/NotFound";
+
+const Routes = () => {
+  return (
     <Switch>
-      <Route exact path="/" component={Login} />
-      <Route path="/home" component={Home} />
+      <Route exact path="/">
+        <Redirect to="/sign-in" />
+      </Route>
+      <PrivateRoute component={ApplyVaccine} exact path="/apply" />
+      <Route component={Login} exact path="/sign-in" />
+      <Route component={NotFound} exact path="/not-found" />
     </Switch>
-  </main>
-));
+  );
+};
 
-// This demo uses a HashRouter instead of BrowserRouter
-// because there is no server to match URLs
+export default Routes;

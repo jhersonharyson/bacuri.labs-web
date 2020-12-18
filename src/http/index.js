@@ -10,7 +10,7 @@ const http = axios.create({
 
 http.interceptors.request.use(
   response => {
-    const token = AuthService.getToken();
+    const token = AuthService.getAccessToken();
     if (token) {
       response.headers.Authorization = `Bearer ${token}`;
     }
