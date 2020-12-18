@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Container } from "./styles";
 const Login = () => {
+  const [username, setUsername] = useState(null);
+  const [password, setPassword] = useState(null);
+
   return (
     <Container className="login-card">
       <div className="login-card-content">
@@ -17,13 +20,24 @@ const Login = () => {
             <div className="icon">
               <i className="far fa-user" />
             </div>
-            <input type="text" placeholder="Username" />
+            <input
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={event => setUsername(event.target.value)}
+              required
+            />
           </div>
           <div className="form-field password">
             <div className="icon">
               <i className="fas fa-lock" />
             </div>
-            <input type="password" placeholder="Password" />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={event => setPassword(event.target.value)}
+            />
           </div>
 
           <button type="submit">Login</button>

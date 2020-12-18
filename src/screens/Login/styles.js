@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const Container = styled.div`
+export const Container = styled.form`
   &.login-card {
     padding: 32px 32px 0;
     box-sizing: border-box;
@@ -118,6 +118,7 @@ export const Container = styled.div`
   }
 
   .form-field input {
+    text-transform: lowercase;
     z-index: 100;
     border: 1px solid rgba(255, 255, 255, 0.2);
     text-align: center;
@@ -129,9 +130,11 @@ export const Container = styled.div`
     transition: all 0.2s;
     padding-left: 50px;
     padding-right: 50px;
+    font-size: 16px;
   }
 
   .form-field input::placeholder {
+    text-transform: capitalize;
     color: white;
     font-size: 16px;
   }
