@@ -9,12 +9,13 @@ const http = axios.create({
 });
 
 http.interceptors.request.use(
-  response => {
+  request => {
+    console.log(request);
     const token = AuthService.getAccessToken();
-    if (token) {
-      response.headers.Authorization = `Bearer ${token}`;
+    if (token && request.url != "/oauth/token") {
+      request.headers.Authorization = `Bearer ${token}`;
     }
-    return response;
+    return request;
   },
   error => {
     console.log(error.message);

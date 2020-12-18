@@ -1,6 +1,7 @@
 import axios from "../http";
 import environments from "../configurations/environments";
 import UserService from "./UserService";
+import { useHistory } from "react-router-dom";
 
 class AuthService {
   access_token = null;
@@ -9,7 +10,7 @@ class AuthService {
     OAUTH_TOKEN: "/oauth/token"
   };
 
-  async login(username, password) {
+  async login(username, password, redirectTo) {
     const { formData, headers } = this.buildLoginParams(username, password);
     const response = await axios.post(this.URL.OAUTH_TOKEN, formData, {
       headers
@@ -18,7 +19,7 @@ class AuthService {
     console.log(response);
 
     if (await this.proccessResponse(response)) {
-      location.href("/apply");
+      redirectTo();
     }
   }
 
@@ -39,10 +40,10 @@ class AuthService {
   }
 
   async proccessResponse(response) {
-    if (response.code == 200) {
+    if (response.status == 200) {
       this.access_token = response?.data?.access_token;
       this.setAccessToken(this.access_token);
-      await this.getUser();
+      console.log(await this.getUser());
       return true;
     }
     return false;

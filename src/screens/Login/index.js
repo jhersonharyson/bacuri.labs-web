@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Container } from "./styles";
 import AuthService from "../../services/AuthService";
 import Loader from "../../components/Loader";
-const Login = () => {
+const Login = props => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -11,7 +11,8 @@ const Login = () => {
     event.preventDefault();
     event.stopPropagation();
     setLoading(true);
-    await AuthService.login(username, password);
+    const redirectTo = () => props.history.push("/apply");
+    await AuthService.login(username, password, redirectTo);
     setLoading(false);
   };
 
