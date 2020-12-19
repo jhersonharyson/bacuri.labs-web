@@ -1244,12 +1244,17 @@ nav {
   position: relative;
 }
 
+.lot {
+  position: relative;
+}
+
 #sidebar {
   flex: 0 0 auto;
   width: 245px;
 }
 
-#search {
+#search,
+#lot {
   padding: 8px 15px;
   width: 100%;
   box-sizing: border-box;

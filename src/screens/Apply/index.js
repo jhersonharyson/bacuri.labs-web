@@ -120,106 +120,106 @@ const ApplyVaccine = () => {
           <div className="col">
             <div className="list">
               <h6>Countries</h6>
-              <div class="item">
+              <div className="item">
                 <span className="progress" style={{ width: "62.4%" }} />
                 <span>United States</span>
                 <span>62.4%</span>
               </div>
-              <div class="item">
+              <div className="item">
                 <span className="progress" style={{ width: "15.0%" }} />
                 <span>India</span>
                 <span>15.0%</span>
               </div>
-              <div class="item">
+              <div className="item">
                 <span className="progress" style={{ width: "5.0%" }} />
                 <span>United Kingdom</span>
                 <span>5.0%</span>
               </div>
-              <div class="item">
+              <div className="item">
                 <span className="progress" style={{ width: "5.0%" }} />
                 <span>Canada</span>
                 <span>5.0%</span>
               </div>
-              <div class="item">
+              <div className="item">
                 <span className="progress" style={{ width: "4.5%" }} />
                 <span>Russia</span>
                 <span>4.5%</span>
               </div>
-              <div class="item">
+              <div className="item">
                 <span className="progress" style={{ width: "2.3%" }} />
                 <span>Mexico</span>
                 <span>2.3%</span>
               </div>
-              <div class="item">
+              <div className="item">
                 <span className="progress" style={{ width: "1.7%" }} />
                 <span>Spain</span>
                 <span>1.7%</span>
               </div>
-              <div class="item">
+              <div className="item">
                 <span className="progress" style={{ width: "1.5%" }} />
                 <span>France</span>
                 <span>1.5%</span>
               </div>
-              <div class="item">
+              <div className="item">
                 <span className="progress" style={{ width: "1.4%" }} />
                 <span>South Africa</span>
                 <span>1.4%</span>
               </div>
-              <div class="item">
+              <div className="item">
                 <span className="progress" style={{ width: "1.2%" }} />
                 <span>Japan</span>
                 <span>1.2%</span>
               </div>
             </div>
-            <div class="d-grid gap-2 d-md-block mb-5">
+            <div className="d-grid gap-2 d-md-block mb-5">
               <button className="btn primary btn-sm">All countries</button>
             </div>
           </div>
           <div className="col flex-start">
             <div className="list">
               <h6>Most visited pages</h6>
-              <div class="item">
+              <div className="item">
                 <span>/ (Logged out)</span>
                 <span>3,929,481</span>
               </div>
-              <div class="item">
+              <div className="item">
                 <span>/ (Logged in)</span>
                 <span>1,143,393</span>
               </div>
-              <div class="item">
+              <div className="item">
                 <span>/tour</span>
                 <span>938,287</span>
               </div>
-              <div class="item">
+              <div className="item">
                 <span>/features/something</span>
                 <span>749,393</span>
               </div>
-              <div class="item">
+              <div className="item">
                 <span>/features/another-thing</span>
                 <span>695,912</span>
               </div>
-              <div class="item">
+              <div className="item">
                 <span>/users/username</span>
                 <span>501,938</span>
               </div>
-              <div class="item">
+              <div className="item">
                 <span>/page-title</span>
                 <span>392,842</span>
               </div>
-              <div class="item">
+              <div className="item">
                 <span>/some/page-slug</span>
                 <span>298,183</span>
               </div>
-              <div class="item">
+              <div className="item">
                 <span>/another/directory/and/page-title</span>
                 <span>193,129</span>
               </div>
-              <div class="item">
+              <div className="item">
                 <span>/one-more/page/directory/file-name</span>
                 <span>93,382</span>
               </div>
             </div>
-            <div class="d-grid gap-2 d-md-block mb-5">
+            <div className="d-grid gap-2 d-md-block mb-5">
               <button className="btn primary btn-sm" href="#">
                 View all pages
               </button>
@@ -230,48 +230,48 @@ const ApplyVaccine = () => {
           <div className="col list-container">
             <div className="list">
               <h6>Devices and resolutions</h6>
-              <div class="item">
+              <div className="item">
                 <span>Desktop (1920x1080)</span>
                 <span>3,929,481</span>
               </div>
-              <div class="item">
+              <div className="item">
                 <span>Desktop (1366x768)</span>
                 <span>1,143,393</span>
               </div>
-              <div class="item">
+              <div className="item">
                 <span>Desktop (1440x900)</span>
                 <span>938,287</span>
               </div>
-              <div class="item">
+              <div className="item">
                 <span>Desktop (1280x800)</span>
                 <span>749,393</span>
               </div>
-              <div class="item">
+              <div className="item">
                 <span>Tablet (1024x768)</span>
                 <span>695,912</span>
               </div>
-              <div class="item">
+              <div className="item">
                 <span>Tablet (768x1024)</span>
                 <span>501,938</span>
               </div>
-              <div class="item">
+              <div className="item">
                 <span>Phone (320x480)</span>
                 <span>392,842</span>
               </div>
-              <div class="item">
+              <div className="item">
                 <span>Phone (720x450)</span>
                 <span>298,183</span>
               </div>
-              <div class="item">
+              <div className="item">
                 <span>Desktop (2560x1080)</span>
                 <span>193,129</span>
               </div>
-              <div class="item">
+              <div className="item">
                 <span>Desktop (2560x1080)</span>
                 <span>193,129</span>
               </div>
             </div>
-            <div class="d-grid gap-2 d-md-block mb-5">
+            <div className="d-grid gap-2 d-md-block mb-5">
               <button className="btn primary btn-sm">View all devices</button>
             </div>
           </div>

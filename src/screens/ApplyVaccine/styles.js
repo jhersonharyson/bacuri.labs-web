@@ -1,68 +1,6 @@
 import styled from "styled-components";
-import { feather } from "styled-icons";
 
-export const Container = styled.div`
-  h4 .highlight {
-    color: #fdc654;
-  }
-
-  .card-list {
-    @include clear();
-    width: 100%;
-  }
-
-  .card {
-    border-radius: 8px;
-    color: white;
-    padding: 10px;
-    position: relative;
-
-    .zmdi {
-      color: white;
-      font-size: 28px;
-      opacity: 0.3;
-      position: absolute;
-      right: 13px;
-      top: 13px;
-    }
-
-    .stat {
-      border-top: 1px solid rgba(255, 255, 255, 0.3);
-      font-size: 8px;
-      margin-top: 25px;
-      padding: 10px 10px 0;
-      text-transform: uppercase;
-    }
-
-    .title {
-      display: inline-block;
-      font-size: 8px;
-      padding: 10px 10px 0;
-      text-transform: uppercase;
-    }
-
-    .value {
-      font-size: 28px;
-      padding: 0 10px;
-    }
-
-    &.blue {
-      background-color: #2298f1;
-    }
-
-    &.green {
-      background-color: #66b92e;
-    }
-
-    &.orange {
-      background-color: #da932c;
-    }
-
-    &.red {
-      background-color: #d65b4a;
-    }
-  }
-`;
+export const Container = styled.div``;
 
 export const DropdownMenu = styled.ul``;
 
@@ -85,4 +23,66 @@ export const DropdownButton = styled.div`
   font-weight: bold;
 `;
 
-export const HelpIcon = styled(feather.HelpIcon)``;
+export const HelpIcon = styled.div``;
+
+export const Dot = styled.div`
+  width: 3px;
+  height: 3px;
+  background-color: #fff;
+  border-radius: 3px;
+  margin-left: 8px;
+  margin-right: 8px;
+`;
+
+export const Description = styled.span`
+  display: flex;
+  align-items: center;
+`;
+
+export const TextDescription = styled.span`
+  font-size: 11px;
+`;
+
+export const Modal = styled.div`
+  display: block;
+  background-color: #3e3d40ba;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  hr {
+    color: red;
+  }
+  .modal-dialog {
+    margin: 0;
+    width: 100%;
+    transition: all 3s;
+    .modal-content {
+      background-color: #343a40;
+      transition: all 3s;
+      .modal-footer {
+        transition: all 3s;
+        border-top-color: #222427;
+      }
+      .modal-header {
+        transition: all 3s;
+        border-bottom-color: #222427;
+      }
+      .modal-title {
+        .observation {
+          font-size: 11px;
+          padding: 6px;
+        }
+        .observation-button {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 11px;
+          svg {
+            font-size: 16px;
+            margin-left: 8px;
+          }
+        }
+      }
+    }
+  }
+`;

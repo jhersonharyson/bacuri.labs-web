@@ -11,8 +11,8 @@ class VaccineService {
   async getAll() {
     try {
       const response = await axios.get(this.URL.VACCINE);
-      const { vaccine } = response.data;
-      return vaccine;
+      const { content } = response.data;
+      return content;
     } catch (e) {
       console.log(e);
     }

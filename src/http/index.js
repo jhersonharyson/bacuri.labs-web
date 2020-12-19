@@ -12,7 +12,10 @@ http.interceptors.request.use(
   request => {
     console.log(request);
     const token = AuthService.getAccessToken();
-    if (token && request.url != "/oauth/token") {
+    if (
+      (token && request.url != "/oauth/token") ||
+      (request.method == "delete" && request.url == "/oauth/token")
+    ) {
       request.headers.Authorization = `Bearer ${token}`;
     }
     return request;
@@ -24,7 +27,12 @@ http.interceptors.request.use(
 );
 
 http.interceptors.response.use(
-  response => response,
+  response => {
+    if (response.code == 401) {
+      AuthService.getAccessToken();
+    }
+    return response;
+  },
   error => {
     console.log(error.message);
     return error;

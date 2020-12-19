@@ -1,11 +1,14 @@
 import React from "react";
-
+import AuthService from "../../services/AuthService";
 import { Container, Dropdown, DropdownMenu, DropdownButton } from "./styles.js";
 
 const MainLayout = ({ children: Content }) => {
   const onSubmit = event => {
     event.preventDefault();
     event.stopPropagation();
+  };
+  const logout = () => {
+    AuthService.logout();
   };
   return (
     <Container>
@@ -66,14 +69,18 @@ const MainLayout = ({ children: Content }) => {
                   <button className="dropdown-item">Profile</button>
                 </li>
                 <li>
-                  <button className="dropdown-item">Exit</button>
+                  <button className="dropdown-item" onClick={logout}>
+                    Exit
+                  </button>
                 </li>
               </DropdownMenu>
             </Dropdown>
           </div>
         </div>
       </nav>
-      <main className="container mt-4">{Content}</main>
+      <main id="content" className="container mt-4">
+        {Content}
+      </main>
       <footer>
         <div className="container text-center">
           Designed with love by J. Haryson && D. Duarte

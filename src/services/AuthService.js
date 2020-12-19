@@ -10,7 +10,7 @@ class AuthService {
     OAUTH_TOKEN: "/oauth/token"
   };
 
-  async login(username, password, redirectTo) {
+  async login(username, password) {
     const { formData, headers } = this.buildLoginParams(username, password);
     const response = await axios.post(this.URL.OAUTH_TOKEN, formData, {
       headers
@@ -19,16 +19,19 @@ class AuthService {
     console.log(response);
 
     if (await this.proccessResponse(response)) {
-      redirectTo();
+      return true;
     }
+    return false;
   }
 
-  logout() {
-    return axios.get(
-      `${
-        this.URL.COMICS
-      }?titleStartsWith=${title}&offset=${offset}&limit=${limit}`
-    );
+  async logout() {
+    try {
+      // await axios.delete(this.URL.COMICS);
+      localStorage.removeItem("access_token");
+      location.href = "/";
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   getAccessToken() {

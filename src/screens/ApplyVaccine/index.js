@@ -1,56 +1,152 @@
 import React, { useState, useEffect } from "react";
+import Loader from "../../components/Loader";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 import VaccineService from "../../services/VaccineService";
-import {
-  Container,
-  Dropdown,
-  DropdownMenu,
-  DropdownButton,
-  HelpIcon
-} from "./styles.js";
+import { Dot, Description, TextDescription, Modal } from "./styles";
 import "./styles.scss";
+
+const RANGE = {
+  INFANT: "INFANTIL",
+  TEENAGER: "ADOLECENTE",
+  ADULT: "ADULTO"
+};
+
+const DOSAGE = {
+  DOSAGE_UNIQUE: "Dosagem Única",
+  DOSAGE_1: "1º Dosagem",
+  DOSAGE_2: "2º Dosagem",
+  DOSAGE_3: "3º Dosagem",
+  DOSAGE_REINFORCEMENT: "Reforço",
+  DOSAGE_1_REINFORCEMENT: "1º Reforço",
+  DOSAGE_2_REINFORCEMENT: "2º Reforço",
+  DOSAGE_INITIAL: "Dosagem Inicial",
+  DOSAGE_YEARLY: "Dosagem Anual",
+  DOSAGE_DECADE: "A cada 10 anos"
+};
+
 const ApplyVaccine = () => {
   const [vaccines, setVaccines] = useState([]);
   const [listOfDisplayedVaccines, setListOfDisplayedVaccines] = useState([]);
   const [query, setQuery] = useState("");
+  const [selectedVaccine, setSelectedVaccine] = useState(null);
+  const [observation, setObservation] = useState(false);
+  const [lot, setLot] = useState("");
   const [loading, setLoading] = useState(true);
 
-  onSearch = query => {
+  const onSearch = query => {
     setQuery(query);
 
     const filtered = !query
       ? vaccines
       : vaccines.filter(vaccine =>
           [vaccine.name, vaccine.preventedDiseases, vaccine.observation].some(
-            text => text.includes(query)
+            text => text?.toLowerCase()?.includes(query?.toLowerCase())
           )
         );
     setListOfDisplayedVaccines(filtered);
   };
 
-  listItem = ({ name, observation, preventedDiseases }) => (
-    <div class="item">
-      <span>{name}</span>
+  const badgeClass = range => {
+    return (
+      "badge btn-" +
+      (range == "INFANT"
+        ? "success"
+        : range == "TEENAGER"
+        ? "secondary"
+        : "warning")
+    );
+  };
+
+  const buildInitialRangeLabel = range => {
+    const LESS_THAN_TWO_YEARS = 12 * 2 - 1;
+    if (range < LESS_THAN_TWO_YEARS) {
+      return `a partir de ${range} meses`;
+    }
+
+    return `a partir de ${Math.floor(range / 12)} anos`;
+  };
+
+  const buildRangeLabel = (initial, final) => {
+    const LESS_THAN_TWO_YEARS = 12 * 2 - 1;
+    const label = "Faixa etária para aplicação";
+    let range = "";
+
+    if (initial < LESS_THAN_TWO_YEARS)
+      range = `de ${initial} até ${final} meses`;
+    else
+      range = `de ${Math.floor(initial / 12)} até ${Math.ceil(
+        final / 12
+      )} anos`;
+
+    return <p className="mb-1">{`${label} ${range}`}</p>;
+  };
+
+  const buildDosageLabel = dosage => <p className="mb-1">{DOSAGE[dosage]}</p>;
+
+  const listItem = (
+    { name, observation, preventedDiseases, initialRange, range, dosage },
+    key
+  ) => (
+    <div className="item" key={key}>
+      <Description>
+        {name}
+        <Dot />
+        <span className={badgeClass(range)}>{RANGE[range]}</span>
+        <Dot />
+        <TextDescription>
+          {buildInitialRangeLabel(initialRange)}
+        </TextDescription>
+        <Dot />
+        <TextDescription>{DOSAGE[dosage]}</TextDescription>
+      </Description>
       <span>
-        <HelpIcon />
+        <FiEye />
       </span>
     </div>
   );
 
-  vaccineList = () => vaccines.map(vaccine => listItem(vaccine));
+  const vaccineList = () =>
+    listOfDisplayedVaccines.map((vaccine, key) => listItem(vaccine, key));
 
   useEffect(() => {
     const fetch = async () => {
       setLoading(true);
-      await setVaccines(await VaccineService.getAll());
-      await setListOfDisplayedVaccines(vaccines);
+      setVaccines((await VaccineService.getAll()) || []);
+      setListOfDisplayedVaccines(vaccines);
       setLoading(false);
     };
-  });
+    fetch();
+    return () => {};
+  }, []);
 
   const onSubmit = event => {
     event.preventDefault();
     event.stopPropagation();
   };
+
+  const showAllVacines = () => {
+    setQuery("");
+    setListOfDisplayedVaccines(vaccines);
+  };
+
+  const buildResultFeedback = () =>
+    `${listOfDisplayedVaccines.length} vaccines founded ${
+      !!query && !loading ? "for '" + query + "'" : ""
+    }`;
+
+  const buildNextDosageLabel = nextDosage => {
+    const LESS_THAN_ONE_YEAR = 12 - 1;
+    let label = "";
+    if (!nextDosage) return null;
+    else if (nextDosage < LESS_THAN_ONE_YEAR) label = `${nextDosage} meses`;
+    else label = `${Math.floor(nextDosage / 12)} anos`;
+
+    return <p className="mb-1">Próxima dosagem em {label}</p>;
+  };
+
+  const buildPreventDisease = diseases => (
+    <p className="mb-1 badge btn-danger">Previne {diseases}</p>
+  );
   return (
     <div className="container">
       <div className="col" id="sidebar">
@@ -123,7 +219,7 @@ const ApplyVaccine = () => {
               className="form-control mr-2 btn-sm"
               type="search"
               value={query}
-              onChange={event => setQuery()}
+              onChange={event => onSearch(event.target.value)}
               placeholder="Search by vaccine name"
               aria-label="Search"
             />
@@ -138,17 +234,80 @@ const ApplyVaccine = () => {
         <div className="row">
           <div className="col list-container">
             <div className="list">
-              <h6>
-                {listOfDisplayedVaccines.length} vaccines founded for "{query}"
-              </h6>
+              <h6>{buildResultFeedback()}</h6>
+              {loading && <Loader />}
               {vaccineList()}
             </div>
-            <div class="d-grid gap-2 d-md-block mb-5">
-              <button className="btn primary btn-sm">View all vaccines</button>
+            <div className="d-grid gap-2 d-md-block mb-5">
+              {vaccines.length != listOfDisplayedVaccines.length && (
+                <button className="btn primary btn-sm" onClick={showAllVacines}>
+                  View all vaccines
+                </button>
+              )}
             </div>
           </div>
         </div>
       </div>
+
+      <Modal className="modal">
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h4 className="modal-title">Vacinação</h4>
+            </div>
+            <div className="modal-body">
+              <div>
+                <div className="row">
+                  <h4 className="modal-title d-flex align-items-center">
+                    {vaccines[0]?.name}
+                    <span
+                      className={badgeClass(vaccines[0]?.range)}
+                      style={{ fontSize: "10px", marginLeft: "8px" }}
+                    >
+                      {RANGE[(vaccines[0]?.range)]}
+                    </span>
+                  </h4>
+
+                  <div className="modal-title">
+                    {buildDosageLabel(vaccines[0]?.dosage)}
+
+                    {buildRangeLabel(
+                      vaccines[1]?.initialRange,
+                      vaccines[1]?.finalRange
+                    )}
+
+                    {buildNextDosageLabel(vaccines[2]?.nextDosage)}
+
+                    {buildPreventDisease(vaccines[2]?.preventedDiseases)}
+
+                    {vaccines[2]?.observation && (
+                      <div
+                        className="observation alert alert-light mb-1"
+                        role="alert"
+                      >
+                        {vaccines[1]?.observation}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                {/*<div className="mt-2">
+                  <label>Lote</label>
+                  <input
+                    className="form-control input-sm"
+                    id="lot"
+                    placeholder="Lote da vacina"
+                  />
+                </div>*/}
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-outline-danger">
+                Fechar
+              </button>
+            </div>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

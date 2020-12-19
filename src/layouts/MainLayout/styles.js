@@ -6,6 +6,9 @@ const $dark_text = "#273142";
 const $light_bg = "#313d4f";
 
 export const Container = styled.div`
+  main#content {
+    padding-top: 40px;
+  }
   h4 .highlight {
     color: #fdc654;
   }

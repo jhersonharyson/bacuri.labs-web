@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Container } from "./styles";
 import AuthService from "../../services/AuthService";
 import Loader from "../../components/Loader";
+
 const Login = props => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -11,9 +12,9 @@ const Login = props => {
     event.preventDefault();
     event.stopPropagation();
     setLoading(true);
-    const redirectTo = () => props.history.push("/apply");
-    await AuthService.login(username, password, redirectTo);
+    const logged = await AuthService.login(username, password);
     setLoading(false);
+    logged && (location.href = "/apply");
   };
 
   return (
