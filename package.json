@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "@popperjs/core": "2.6.0",
-    "@styled-icons/feather": "10.18.0",
     "axios": "0.21.0",
     "bootstrap": "5.0.0-beta1",
     "history": "5.0.0",
@@ -14,8 +13,7 @@
     "react-dom": "17.0.1",
     "react-is": "17.0.1",
     "react-router-dom": "5.2.0",
-    "styled-components": "5.2.1",
-    "styled-icons": "10.22.0"
+    "styled-components": "5.2.1"
   },
   "scripts": {
     "start": "react-scripts start",
