@@ -1,5 +1,9 @@
 import styled from "styled-components";
-import { feather } from "styled-icons";
+
+const $bg = "#1b2431";
+const $light_text = "#738297";
+const $dark_text = "#273142";
+const $light_bg = "#313d4f";
 
 export const Container = styled.div`
   h4 .highlight {
@@ -84,5 +88,3 @@ export const DropdownButton = styled.div`
   border: 1px solid;
   font-weight: bold;
 `;
-
-export const HelpIcon = styled(feather.HelpIcon)``;

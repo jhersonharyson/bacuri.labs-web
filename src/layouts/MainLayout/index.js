@@ -1,18 +1,18 @@
 import React from "react";
 
 import { Container, Dropdown, DropdownMenu, DropdownButton } from "./styles.js";
-import "./styles.scss";
-const MainLayout = ({ children: Content, ...props }) => {
+
+const MainLayout = ({ children: Content }) => {
   const onSubmit = event => {
     event.preventDefault();
     event.stopPropagation();
   };
   return (
     <Container>
-      <nav className="navbar navbar-expand-md navbar-dark bg-dark fixed-top p-0 mr-0">
+      <nav className="navbar navbar-expand-md navbar-dark bg-dark fixed-top p-1 mr-0">
         <div className="container-fluid">
           <a className="navbar-brand" href="#">
-            <h4>
+            <h4 className="mb-0">
               Bacuri<span className="highlight">Labs</span>
             </h4>
           </a>
@@ -73,9 +73,7 @@ const MainLayout = ({ children: Content, ...props }) => {
           </div>
         </div>
       </nav>
-      <main className="container mt-4">
-        <Content {...props} />
-      </main>
+      <main className="container mt-4">{Content}</main>
       <footer>
         <div className="container text-center">
           Designed with love by J. Haryson && D. Duarte
