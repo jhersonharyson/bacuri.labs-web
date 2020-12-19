@@ -3,15 +3,17 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "axios": "^0.21.0",
-    "history": "^5.0.0",
-    "node-sass": "^5.0.0",
-    "prop-types": "^15.7.2",
-    "react": "^17.0.0",
-    "react-dom": "^17.0.0",
-    "react-is": ">= 16.8.0",
-    "react-router-dom": "^5.2.0",
-    "styled-components": "^5.2.1"
+    "@popperjs/core": "^2.5.4",
+    "axios": "0.21.0",
+    "bootstrap": "next",
+    "history": "5.0.0",
+    "node-sass": "5.0.0",
+    "prop-types": "15.7.2",
+    "react": "17.0.1",
+    "react-dom": "17.0.1",
+    "react-is": "17.0.1",
+    "react-router-dom": "5.2.0",
+    "styled-components": "5.2.1"
   },
   "scripts": {
     "start": "react-scripts start",
