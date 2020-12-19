@@ -78,30 +78,34 @@ const ApplyVaccine = () => {
         final / 12
       )} anos`;
 
-    return <p className="mb-1">{`${label} ${range}`}</p>;
+    return <span className="mb-1">{`${label} ${range}`}</span>;
   };
 
-  const buildDosageLabel = dosage => <p className="mb-1">{DOSAGE[dosage]}</p>;
+  const buildDosageLabel = dosage => (
+    <span className="mb-1">{DOSAGE[dosage]}</span>
+  );
 
-  const listItem = (
-    { name, observation, preventedDiseases, initialRange, range, dosage },
-    key
-  ) => (
+  const listItem = (vaccine, key) => (
     <div className="item" key={key}>
       <Description>
-        {name}
+        {vaccine.name}
         <Dot />
-        <span className={badgeClass(range)}>{RANGE[range]}</span>
+        <span className={badgeClass(vaccine.range)}>
+          {RANGE[vaccine.range]}
+        </span>
         <Dot />
         <TextDescription>
-          {buildInitialRangeLabel(initialRange)}
+          {buildInitialRangeLabel(vaccine.initialRange)}
         </TextDescription>
         <Dot />
-        <TextDescription>{DOSAGE[dosage]}</TextDescription>
+        <TextDescription>{DOSAGE[vaccine.dosage]}</TextDescription>
       </Description>
-      <span>
+      <button
+        className="btn btn-link"
+        onClick={() => setSelectedVaccine(vaccine)}
+      >
         <FiEye />
-      </span>
+      </button>
     </div>
   );
 
@@ -141,12 +145,47 @@ const ApplyVaccine = () => {
     else if (nextDosage < LESS_THAN_ONE_YEAR) label = `${nextDosage} meses`;
     else label = `${Math.floor(nextDosage / 12)} anos`;
 
-    return <p className="mb-1">Próxima dosagem em {label}</p>;
+    return <span className="mb-1">Próxima dosagem em {label}</span>;
   };
 
-  const buildPreventDisease = diseases => (
-    <p className="mb-1 badge btn-danger">Previne {diseases}</p>
+  const buildPreventDiseaseLabel = diseases => (
+    <p className="mb-2 badge btn-danger">Previne {diseases}</p>
   );
+
+  const buildNextVaccineLabel = nextVaccine =>
+    nextVaccine ? (
+      <span className="mb-1">
+        Próxima vacinação é a {DOSAGE[nextVaccine.dosage]} da {nextVaccine.name}
+      </span>
+    ) : (
+      ""
+    );
+  const buildAgeRangeLabel = range => (
+    <span className="mb-1"> Vacina {RANGE[range].toLowerCase()} </span>
+  );
+
+  const buildObservationLabel = observation =>
+    !!observation ? (
+      <div className="observation alert alert-light mb-1" role="alert">
+        {observation}
+      </div>
+    ) : (
+      ""
+    );
+
+  const buildVaccineDetail = vaccine => {
+    if (vaccine)
+      return [
+        buildAgeRangeLabel(vaccine.range),
+        buildDosageLabel(vaccine.dosage),
+        buildRangeLabel(vaccine?.initialRange, vaccine?.finalRange),
+        buildNextDosageLabel(vaccine?.nextDosage),
+        buildNextVaccineLabel(vaccine?.nextVaccine),
+        buildPreventDiseaseLabel(vaccine?.preventedDiseases)
+      ]
+        .filter(detail => !!detail)
+        .map(info => <li>{info}</li>);
+  };
   return (
     <div className="container">
       <div className="col" id="sidebar">
@@ -249,45 +288,20 @@ const ApplyVaccine = () => {
         </div>
       </div>
 
-      <Modal className="modal">
+      <Modal className="modal" show={!!selectedVaccine}>
         <div className="modal-dialog" role="document">
           <div className="modal-content">
             <div className="modal-header">
-              <h4 className="modal-title">Vacinação</h4>
+              <h1 className="modal-title d-flex align-items-center justify-content-center mb-1 mt-2">
+                <em style={{ fontWeight: "100" }}>{selectedVaccine?.name}</em>
+              </h1>
             </div>
             <div className="modal-body">
               <div>
                 <div className="row">
-                  <h4 className="modal-title d-flex align-items-center">
-                    {vaccines[0]?.name}
-                    <span
-                      className={badgeClass(vaccines[0]?.range)}
-                      style={{ fontSize: "10px", marginLeft: "8px" }}
-                    >
-                      {RANGE[(vaccines[0]?.range)]}
-                    </span>
-                  </h4>
-
                   <div className="modal-title">
-                    {buildDosageLabel(vaccines[0]?.dosage)}
-
-                    {buildRangeLabel(
-                      vaccines[1]?.initialRange,
-                      vaccines[1]?.finalRange
-                    )}
-
-                    {buildNextDosageLabel(vaccines[2]?.nextDosage)}
-
-                    {buildPreventDisease(vaccines[2]?.preventedDiseases)}
-
-                    {vaccines[2]?.observation && (
-                      <div
-                        className="observation alert alert-light mb-1"
-                        role="alert"
-                      >
-                        {vaccines[1]?.observation}
-                      </div>
-                    )}
+                    {buildVaccineDetail(selectedVaccine)}
+                    {buildObservationLabel(selectedVaccine?.observation)}
                   </div>
                 </div>
                 {/*<div className="mt-2">
@@ -301,8 +315,15 @@ const ApplyVaccine = () => {
               </div>
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn btn-outline-danger">
-                Fechar
+              <button
+                type="button"
+                className="btn btn-outline-danger"
+                onClick={() => setSelectedVaccine(null)}
+              >
+                Cancelar
+              </button>
+              <button type="button" className="btn btn-success active">
+                Aplicar vacina
               </button>
             </div>
           </div>

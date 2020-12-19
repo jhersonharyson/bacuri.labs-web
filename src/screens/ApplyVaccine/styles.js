@@ -44,9 +44,8 @@ export const TextDescription = styled.span`
 `;
 
 export const Modal = styled.div`
-  display: block;
+  display: ${({ show }) => (show ? "flex" : "none")};
   background-color: #3e3d40ba;
-  display: flex;
   justify-content: center;
   align-items: center;
   hr {
@@ -55,7 +54,7 @@ export const Modal = styled.div`
   .modal-dialog {
     margin: 0;
     width: 100%;
-    transition: all 3s;
+    transition: all 0.3s;
     .modal-content {
       background-color: #343a40;
       transition: all 3s;
@@ -66,6 +65,8 @@ export const Modal = styled.div`
       .modal-header {
         transition: all 3s;
         border-bottom-color: #222427;
+        padding-bottom: 4px;
+        padding-top: 4px;
       }
       .modal-title {
         .observation {
