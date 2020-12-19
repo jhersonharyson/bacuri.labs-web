@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-
+import React, { useState, useEffect } from "react";
+import VaccineService from "../../services/VaccineService";
 import {
   Container,
   Dropdown,
@@ -9,6 +9,44 @@ import {
 } from "./styles.js";
 import "./styles.scss";
 const ApplyVaccine = () => {
+  const [vaccines, setVaccines] = useState([]);
+  const [listOfDisplayedVaccines, setListOfDisplayedVaccines] = useState([]);
+  const [query, setQuery] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  onSearch = query => {
+    setQuery(query);
+
+    const filtered = !query
+      ? vaccines
+      : vaccines.filter(vaccine =>
+          [vaccine.name, vaccine.preventedDiseases, vaccine.observation].some(
+            text => text.includes(query)
+          )
+        );
+    setListOfDisplayedVaccines(filtered);
+  };
+
+  listItem = ({ name, observation, preventedDiseases }) => (
+    <div class="item">
+      <span>{name}</span>
+      <span>
+        <HelpIcon />
+      </span>
+    </div>
+  );
+
+  vaccineList = () => vaccines.map(vaccine => listItem(vaccine));
+
+  useEffect(() => {
+    const fetch = async () => {
+      setLoading(true);
+      await setVaccines(await VaccineService.getAll());
+      await setListOfDisplayedVaccines(vaccines);
+      setLoading(false);
+    };
+  });
+
   const onSubmit = event => {
     event.preventDefault();
     event.stopPropagation();
@@ -84,6 +122,8 @@ const ApplyVaccine = () => {
             <input
               className="form-control mr-2 btn-sm"
               type="search"
+              value={query}
+              onChange={event => setQuery()}
               placeholder="Search by vaccine name"
               aria-label="Search"
             />
@@ -98,49 +138,10 @@ const ApplyVaccine = () => {
         <div className="row">
           <div className="col list-container">
             <div className="list">
-              <h6>25 vaccines founded for "asdasd"</h6>
-              <div class="item">
-                <span>Desktop (1920x1080)</span>
-                <span>
-                  <HelpIcon />
-                </span>
-              </div>
-              <div class="item">
-                <span>Desktop (1366x768)</span>
-                <span>1,143,393</span>
-              </div>
-              <div class="item">
-                <span>Desktop (1440x900)</span>
-                <span>938,287</span>
-              </div>
-              <div class="item">
-                <span>Desktop (1280x800)</span>
-                <span>749,393</span>
-              </div>
-              <div class="item">
-                <span>Tablet (1024x768)</span>
-                <span>695,912</span>
-              </div>
-              <div class="item">
-                <span>Tablet (768x1024)</span>
-                <span>501,938</span>
-              </div>
-              <div class="item">
-                <span>Phone (320x480)</span>
-                <span>392,842</span>
-              </div>
-              <div class="item">
-                <span>Phone (720x450)</span>
-                <span>298,183</span>
-              </div>
-              <div class="item">
-                <span>Desktop (2560x1080)</span>
-                <span>193,129</span>
-              </div>
-              <div class="item">
-                <span>Desktop (2560x1080)</span>
-                <span>193,129</span>
-              </div>
+              <h6>
+                {listOfDisplayedVaccines.length} vaccines founded for "{query}"
+              </h6>
+              {vaccineList()}
             </div>
             <div class="d-grid gap-2 d-md-block mb-5">
               <button className="btn primary btn-sm">View all vaccines</button>
