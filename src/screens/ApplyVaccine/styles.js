@@ -60,6 +60,9 @@ export const Modal = styled.div`
       .modal-footer {
         transition: all 3s;
         border-top-color: #222427;
+        justify-content: flex-end;
+        display: flex;
+        width: 100%;
       }
       .modal-header {
         transition: all 3s;
@@ -94,7 +97,7 @@ export const Modal = styled.div`
     font-size: 24px;
     align-self: flex-start;
     margin-left: 16px;
-    margin-top: 16px;
+    margin-top: 5px;
   }
 
   .detail {
@@ -144,11 +147,55 @@ export const Modal = styled.div`
     flex: 1;
     justify-content: flex-start;
     width: 100%;
+    background-color: #3c3c3c;
+  }
+
+  .footer {
+    transition: all 3s;
+    justify-content: flex-end;
+    display: flex;
+    width: 100%;
+    transition: all 3s;
+    background-color: #2b2a2a;
+    border-top: 1px solid #222427;
+  }
+
+  .body {
+    background-color: #1e1e1e;
+    color: #cccccc;
+    width: 100%;
+    display: flex;
+    flex: 8;
+    padding-left: 90px;
+    padding-right: 90px;
+    padding-top: 24px;
+
+    h4 {
+      display: flex;
+      margin-bottom: 20px;
+      svg {
+        margin-right: 8px;
+      }
+    }
+
+    ul {
+      svg {
+        font-size: 16px;
+        margin-right: 8px;
+      }
+    }
+
+    .generate-code {
+      width: 100%;
+    }
   }
 
   .divisor {
-    border: 2px solid #fff;
+    border: 1px solid #fff;
+    margin-top: -4px;
     width: 100%;
+    height: 0px;
+    align-self: center;
   }
 
   display: flex;

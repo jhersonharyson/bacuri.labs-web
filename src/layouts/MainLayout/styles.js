@@ -8,6 +8,7 @@ const $light_bg = "#313d4f";
 export const Container = styled.div`
   main#content {
     padding-top: 40px;
+    overflow: auto;
   }
   h4 .highlight {
     color: #fdc654;

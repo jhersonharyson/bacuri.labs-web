@@ -1,11 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Loader from "../../components/Loader";
 import { FiEye, FiEyeOff, FiArrowLeft } from "react-icons/fi";
 import {
   FaSyringe,
   FaCalendarDay,
   FaFileMedicalAlt,
-  FaSignInAlt
+  FaSignInAlt,
+  FaInfoCircle,
+  FaSortNumericDown,
+  FaUserShield,
+  FaShieldAlt,
+  FaVial,
+  FaNotesMedical
 } from "react-icons/fa";
 import VaccineService from "../../services/VaccineService";
 import { Dot, Description, TextDescription, Modal } from "./styles";
@@ -30,14 +36,28 @@ const DOSAGE = {
   DOSAGE_DECADE: "A cada 10 anos"
 };
 
+const ICONS = [
+  <FaUserShield />,
+  <FaVial />,
+  <FaSortNumericDown />,
+  <FaFileMedicalAlt />,
+  <FaSignInAlt />,
+  <FaCalendarDay />
+];
+
 const ApplyVaccine = () => {
   const [vaccines, setVaccines] = useState([]);
   const [listOfDisplayedVaccines, setListOfDisplayedVaccines] = useState([]);
   const [query, setQuery] = useState("");
   const [selectedVaccine, setSelectedVaccine] = useState(null);
-  const [observation, setObservation] = useState(false);
+  const [applyVaccine, setApplyVaccine] = useState(null);
   const [lot, setLot] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setApplyVaccine(null);
+  }, [selectedVaccine]);
 
   const onSearch = query => {
     setQuery(query);
@@ -84,12 +104,10 @@ const ApplyVaccine = () => {
         final / 12
       )} anos`;
 
-    return <span className="mb-1">{`${label} ${range}`}</span>;
+    return `${label} ${range}`;
   };
 
-  const buildDosageLabel = dosage => (
-    <span className="mb-1">{DOSAGE[dosage]}</span>
-  );
+  const buildDosageLabel = dosage => DOSAGE[dosage];
 
   const listItem = (vaccine, key) => (
     <div className="item" key={key}>
@@ -140,8 +158,8 @@ const ApplyVaccine = () => {
   };
 
   const buildResultFeedback = () =>
-    `${listOfDisplayedVaccines.length} vaccines founded ${
-      !!query && !loading ? "for '" + query + "'" : ""
+    `${listOfDisplayedVaccines.length} vacinas encontradas ${
+      !!query && !loading ? "para o termo '" + query + "'" : ""
     }`;
 
   const buildNextDosageLabel = nextDosage => {
@@ -151,24 +169,24 @@ const ApplyVaccine = () => {
     else if (nextDosage < LESS_THAN_ONE_YEAR) label = `${nextDosage} meses`;
     else label = `${Math.floor(nextDosage / 12)} anos`;
 
-    return <span className="mb-1">Próxima dosagem em {label}</span>;
+    return `Próxima dosagem em ${label}`;
   };
 
   const buildPreventDiseaseLabel = diseases => (
-    <p className="mb-2 badge btn-danger">Previne {diseases}</p>
+    <p className="mb-2 badge btn-danger">{diseases}</p>
   );
 
   const buildNextVaccineLabel = nextVaccine =>
-    nextVaccine ? (
-      <span className="mb-1">
-        Próxima vacinação é a {DOSAGE[nextVaccine.dosage]} da {nextVaccine.name}
-      </span>
-    ) : (
-      ""
-    );
-  const buildAgeRangeLabel = range => (
-    <span className="mb-1"> Vacina {RANGE[range].toLowerCase()} </span>
-  );
+    nextVaccine
+      ? `Próxima vacinação é a ${DOSAGE[nextVaccine.dosage]} da ${
+          nextVaccine.name
+        }`
+      : "";
+
+  const buildAgeRangeLabel = range => `Vacina ${RANGE[range].toLowerCase()}`;
+
+  const buildApplicationDate = () =>
+    `Data de aplicação ${new Date().toLocaleDateString()}`;
 
   const buildObservationLabel = observation =>
     !!observation ? (
@@ -179,6 +197,14 @@ const ApplyVaccine = () => {
       ""
     );
 
+  const withDefaultSpan = content => <span className="mb-1">{content}</span>;
+
+  const withIcon = (content, index) => (
+    <li>
+      {ICONS[index]} {content}
+    </li>
+  );
+
   const buildVaccineDetail = vaccine => {
     if (vaccine)
       return [
@@ -187,11 +213,84 @@ const ApplyVaccine = () => {
         buildRangeLabel(vaccine?.initialRange, vaccine?.finalRange),
         buildNextDosageLabel(vaccine?.nextDosage),
         buildNextVaccineLabel(vaccine?.nextVaccine),
-        buildPreventDiseaseLabel(vaccine?.preventedDiseases)
+        buildApplicationDate()
       ]
         .filter(detail => !!detail)
-        .map(info => <li>{info}</li>);
+        .map(withIcon)
+        .map(withDefaultSpan);
   };
+
+  const buildApplyVaccineinfo = () =>
+    applyVaccine && (
+      <div>
+        <h4>
+          <FaInfoCircle />
+          RESUMO DA VACINA
+        </h4>
+        <ul>{buildVaccineDetail(selectedVaccine)}</ul>
+        <hr />
+
+        <h4>
+          <FaSyringe />
+          LOTE DA VACINA
+        </h4>
+        <input
+          className="form-control mr-2 btn-sm"
+          type="search"
+          id="lot"
+          value={lot}
+          onChange={event => setLot(event.target.value)}
+          placeholder="Lote da vacina a ser aplicada"
+          aria-label="Search"
+        />
+        <hr />
+
+        <h4>
+          <FaShieldAlt />
+          CONFIRMAÇÃO DE SEGURANÇA
+        </h4>
+        <input
+          className="form-control mr-2 btn-sm"
+          type="password"
+          value={password}
+          id="password"
+          onChange={event => setPassword(event.target.value)}
+          placeholder="Confirme sua senha"
+          aria-label="Search"
+        />
+        <button className="generate-code btn btn-primary active btn-block mt-3">
+          GERAR CÓDIGO
+        </button>
+      </div>
+    );
+
+  const buildInfoSection = () =>
+    selectedVaccine &&
+    !applyVaccine && (
+      <div>
+        <h4>
+          <FaInfoCircle />
+          INFORMAÇÕES BÁSICAS
+        </h4>
+        <ul>{buildVaccineDetail(selectedVaccine)}</ul>
+        <hr />
+
+        <h4>
+          <FaShieldAlt />
+          DOENÇAS PREVINIDAS
+        </h4>
+        {buildPreventDiseaseLabel(selectedVaccine?.preventedDiseases)}
+        <hr />
+
+        <h4>
+          <FaNotesMedical />
+          OBSERVAÇÕES
+        </h4>
+        {buildObservationLabel(selectedVaccine?.observation) ||
+          "Sem observações registradas**"}
+      </div>
+    );
+
   return (
     <div className="container">
       <div className="col" id="sidebar">
@@ -252,8 +351,8 @@ const ApplyVaccine = () => {
       <div className="col">
         <div className="row fluid header">
           <div className="label">
-            <span>Vaccine</span>
-            <h2>Application</h2>
+            <span>Vacinas</span>
+            <h2>Aplicação</h2>
           </div>
         </div>
         <div className="divider" />
@@ -265,11 +364,11 @@ const ApplyVaccine = () => {
               type="search"
               value={query}
               onChange={event => onSearch(event.target.value)}
-              placeholder="Search by vaccine name"
+              placeholder="Pesquise pelo nome da vacina"
               aria-label="Search"
             />
             <button className="btn btn-outline-success btn-sm" type="submit">
-              Search
+              Buscar
             </button>
           </form>
         </div>
@@ -295,14 +394,20 @@ const ApplyVaccine = () => {
       </div>
       <Modal show={!!selectedVaccine}>
         <div className="header">
-          <button className="close btn btn-link">
+          <button
+            className="close btn btn-link"
+            onClick={() => setSelectedVaccine(null)}
+          >
             <FiArrowLeft />
           </button>
           <div className="detail">
-            <h1 className="modal-title d-flex mb-1 mt-2">
+            <h1 className="modal-title d-flex mb-1">
               <em style={{ fontWeight: "100" }}>{selectedVaccine?.name}</em>
               <div className="apply-divisor ml-5 mt-1">
-                <button className="apply btn btn-link">
+                <button
+                  className="apply btn btn-link"
+                  onClick={() => setApplyVaccine(true)}
+                >
                   <FaSyringe /> <span> aplicar </span>
                 </button>
                 <div className="divisor" />
@@ -311,33 +416,27 @@ const ApplyVaccine = () => {
           </div>
         </div>
 
-        <div className="modal-body">
+        <div className="body">
           <div>
             <div className="row">
-              <div className="modal-title">
-                {buildVaccineDetail(selectedVaccine)}
-                {buildObservationLabel(selectedVaccine?.observation)}
-              </div>
-            </div>
-            <div className="mt-2">
-              <label>Lote</label>
-              <input
-                className="form-control input-sm"
-                id="lot"
-                placeholder="Lote da vacina"
-              />
+              {buildInfoSection()}
+              {buildApplyVaccineinfo()}
             </div>
           </div>
         </div>
-        <div className="modal-footer">
+        <div className="footer py-4">
           <button
             type="button"
-            className="btn btn-outline-danger"
+            className="btn btn-outline-danger mr-4"
             onClick={() => setSelectedVaccine(null)}
           >
             Cancelar
           </button>
-          <button type="button" className="btn btn-success active">
+          <button
+            type="button"
+            className="btn btn-success active mr-4"
+            onClick={() => setApplyVaccine(true)}
+          >
             Aplicar vacina
           </button>
         </div>
