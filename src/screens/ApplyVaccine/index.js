@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Loader from "../../components/Loader";
-import { FiEye, FiEyeOff } from "react-icons/fi";
+import { FiEye, FiEyeOff, FiArrowLeft } from "react-icons/fi";
+import {
+  FaSyringe,
+  FaCalendarDay,
+  FaFileMedicalAlt,
+  FaSignInAlt
+} from "react-icons/fa";
 import VaccineService from "../../services/VaccineService";
 import { Dot, Description, TextDescription, Modal } from "./styles";
 import "./styles.scss";
@@ -288,47 +294,54 @@ const ApplyVaccine = () => {
         </div>
       </div>
       <Modal show={!!selectedVaccine}>
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h1 className="modal-title d-flex align-items-center justify-content-center mb-1 mt-2">
-                <em style={{ fontWeight: "100" }}>{selectedVaccine?.name}</em>
-              </h1>
-            </div>
-            <div className="modal-body">
-              <div>
-                <div className="row">
-                  <div className="modal-title">
-                    {buildVaccineDetail(selectedVaccine)}
-                    {buildObservationLabel(selectedVaccine?.observation)}
-                  </div>
-                </div>
-                <div className="mt-2">
-                  <label>Lote</label>
-                  <input
-                    className="form-control input-sm"
-                    id="lot"
-                    placeholder="Lote da vacina"
-                  />
-                </div>
+        <div className="header">
+          <button className="close btn btn-link">
+            <FiArrowLeft />
+          </button>
+          <div className="detail">
+            <h1 className="modal-title d-flex mb-1 mt-2">
+              <em style={{ fontWeight: "100" }}>{selectedVaccine?.name}</em>
+              <div className="apply-divisor ml-5 mt-1">
+                <button className="apply btn btn-link">
+                  <FaSyringe /> <span> aplicar </span>
+                </button>
+                <div className="divisor" />
+              </div>
+            </h1>
+          </div>
+        </div>
+
+        <div className="modal-body">
+          <div>
+            <div className="row">
+              <div className="modal-title">
+                {buildVaccineDetail(selectedVaccine)}
+                {buildObservationLabel(selectedVaccine?.observation)}
               </div>
             </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-outline-danger"
-                onClick={() => setSelectedVaccine(null)}
-              >
-                Cancelar
-              </button>
-              <button type="button" className="btn btn-success active">
-                Aplicar vacina
-              </button>
+            <div className="mt-2">
+              <label>Lote</label>
+              <input
+                className="form-control input-sm"
+                id="lot"
+                placeholder="Lote da vacina"
+              />
             </div>
           </div>
         </div>
+        <div className="modal-footer">
+          <button
+            type="button"
+            className="btn btn-outline-danger"
+            onClick={() => setSelectedVaccine(null)}
+          >
+            Cancelar
+          </button>
+          <button type="button" className="btn btn-success active">
+            Aplicar vacina
+          </button>
+        </div>
       </Modal>
-      *
     </div>
   );
 };

@@ -90,12 +90,74 @@ export const Modal = styled.div`
     position: absolute;
   }
 
+  .close {
+    font-size: 24px;
+    align-self: flex-start;
+    margin-left: 16px;
+    margin-top: 16px;
+  }
+
+  .detail {
+    align-self: flex-start;
+    margin-left: 16px;
+    margin-top: 8px;
+    flex: 1;
+
+    .apply-divisor {
+      display: flex;
+      flex: 1;
+      width: 100%;
+    }
+
+    .apply {
+      border: 1px solid #fff;
+      border-radius: 50px;
+      width: 50px;
+      height: 50px;
+      transition: 0.6s;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      span {
+        display: none;
+      }
+
+      :hover {
+        width: 130px;
+        span {
+          display: block;
+          color: #fff;
+          font-size: 18px;
+        }
+      }
+
+      svg {
+        color: #fff;
+        font-size: 24px;
+      }
+    }
+  }
+
+  .header {
+    display: flex;
+    flex: 1;
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  .divisor {
+    border: 2px solid #fff;
+    width: 100%;
+  }
+
   display: flex;
+  flex-direction: column;
   position: absolute;
   height: 100vh;
   width: 100%;
   top: 0;
   left: ${({ show }) => (show ? "0" : "100vw")};
   transition: 0.6s;
-  z-index: 100000
+  z-index: 100000;
 `;
