@@ -287,8 +287,7 @@ const ApplyVaccine = () => {
           </div>
         </div>
       </div>
-
-      <Modal className="modal" show={!!selectedVaccine}>
+      <Modal show={!!selectedVaccine}>
         <div className="modal-dialog" role="document">
           <div className="modal-content">
             <div className="modal-header">
@@ -304,14 +303,14 @@ const ApplyVaccine = () => {
                     {buildObservationLabel(selectedVaccine?.observation)}
                   </div>
                 </div>
-                {/*<div className="mt-2">
+                <div className="mt-2">
                   <label>Lote</label>
                   <input
                     className="form-control input-sm"
                     id="lot"
                     placeholder="Lote da vacina"
                   />
-                </div>*/}
+                </div>
               </div>
             </div>
             <div className="modal-footer">
@@ -329,6 +328,7 @@ const ApplyVaccine = () => {
           </div>
         </div>
       </Modal>
+      *
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css, keyframe } from "styled-components";
 
 export const Container = styled.div``;
 
@@ -44,8 +44,7 @@ export const TextDescription = styled.span`
 `;
 
 export const Modal = styled.div`
-  display: ${({ show }) => (show ? "flex" : "none")};
-  background-color: #3e3d40ba;
+  background-color: #1c1f2b;
   justify-content: center;
   align-items: center;
   hr {
@@ -86,4 +85,17 @@ export const Modal = styled.div`
       }
     }
   }
+
+  .card {
+    position: absolute;
+  }
+
+  display: flex;
+  position: absolute;
+  height: 100vh;
+  width: 100%;
+  top: 0;
+  left: ${({ show }) => (show ? "0" : "100vw")};
+  transition: 0.6s;
+  z-index: 100000
 `;
