@@ -27,6 +27,7 @@ class AuthService {
   async logout() {
     try {
       // await axios.delete(this.URL.COMICS);
+      UserService.removeUser();
       localStorage.removeItem("access_token");
       location.href = "/";
     } catch (e) {

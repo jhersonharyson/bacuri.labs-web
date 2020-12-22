@@ -194,6 +194,10 @@ export const Modal = styled.div`
     height: 5px;
   }
 
+  .qrcode-cancel {
+    width: 100%;
+  }
+
   .qrcode-area {
     padding: 6px;
     border-radius: 8px;
@@ -201,6 +205,7 @@ export const Modal = styled.div`
     height: 140px;
     background-color: #fff;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     svg {

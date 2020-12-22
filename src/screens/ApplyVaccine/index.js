@@ -16,6 +16,7 @@ import {
   FaQrcode
 } from "react-icons/fa";
 import VaccineService from "../../services/VaccineService";
+import UserService from "../../services/UserService";
 import { Dot, Description, TextDescription, Modal } from "./styles";
 import "./styles.scss";
 
@@ -61,6 +62,7 @@ const ApplyVaccine = () => {
   const [loading, setLoading] = useState(true);
 
   let secondsSpent = 0;
+  let interval;
 
   useEffect(() => {
     setApplyVaccine(null);
@@ -69,6 +71,10 @@ const ApplyVaccine = () => {
     setCode(null);
     setInvalidCode(true);
   }, [selectedVaccine]);
+
+  useEffect(() => {
+    clearInterval(interval);
+  }, [code]);
 
   const onSearch = query => {
     setQuery(query);
@@ -166,17 +172,21 @@ const ApplyVaccine = () => {
   const onFormLotSubmit = event => {
     event.preventDefault();
     event.stopPropagation();
-    const code = btoa("userId@vaccineId@lote@transactionId@datetime");
-    setCode();
+    const code = btoa(
+      `${UserService.getUser().dependentProfiles[0].id}@${
+        selectedVaccine.id
+      }@${lot}@transactionId@${new Date().getTime()}`
+    );
+    setCode(code);
     setProgess(0);
     setInvalidCode(false);
     progressInterval();
   };
 
   const progressInterval = () => {
-    const EXPIRES_IN_15_MINUTES = 1000 * 60;
+    const EXPIRES_IN_15_MINUTES = 1000 * 60 * 15;
 
-    const interval = setInterval(() => {
+    interval = setInterval(() => {
       if (secondsSpent > EXPIRES_IN_15_MINUTES / 1000) {
         clearInterval(interval);
         setInvalidCode(true);
@@ -303,54 +313,39 @@ const ApplyVaccine = () => {
           </button>
         </form>
         <span className="col-2" />
-        <form className="col-5">
-          <h4>
-            <FaShieldAlt />
-            CONFIRMAÇÃO DE SEGURANÇA
-          </h4>
-          <input
-            className="form-control mr-2 btn-sm"
-            type="password"
-            value={password}
-            id="password"
-            onChange={event => setPassword(event.target.value)}
-            placeholder="Confirme sua senha"
-            aria-label="Search"
-          />
-          <hr />
-          <h4>
-            <FaQrcode />
-            QRCode
-          </h4>
-          <div className="d-flex">
-            <div>
-              <div className="qrcode-area">
-                {!invalidCode ? (
-                  <QRCode value="http://facebook.github.io/react/" />
-                ) : (
-                  <FiSlash />
-                )}
-              </div>
-              {!invalidCode && (
-                <div class="progress mt-2">
-                  <div
-                    class="progress-bar progress-bar-striped bg-success"
-                    role="progressbar"
-                    style={{ width: 100 - progress + "%" }}
-                  />
+        {code && (
+          <form className="col-5" onSubmit={onSubmit}>
+            <h4>
+              <FaQrcode />
+              QRCode
+            </h4>
+            <div className="d-flex">
+              <div>
+                <div className="qrcode-area">
+                  {!invalidCode && code ? <QRCode value={code} /> : <FiSlash />}
                 </div>
-              )}
+                {!invalidCode && (
+                  <div class="progress mt-2">
+                    <div
+                      class="progress-bar progress-bar-striped bg-success"
+                      role="progressbar"
+                      style={{ width: 100 - progress + "%" }}
+                    />
+                  </div>
+                )}
+                <button
+                  className="qrcode-cancel btn btn-warning active btn-sm mt-2 "
+                  onClick={() => {
+                    clearInterval(interval);
+                    setCode(null);
+                  }}
+                >
+                  CANCELAR
+                </button>
+              </div>
             </div>
-            <div className="d-flex col">
-              <button className="btn btn-success active btn-sm">
-                GERAR NOVO CÓDIGO
-              </button>
-              <button className="btn btn-warning active btn-sm mt-2">
-                CANCELAR
-              </button>
-            </div>
-          </div>
-        </form>
+          </form>
+        )}
       </div>
     );
 
