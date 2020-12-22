@@ -164,7 +164,7 @@ export const Modal = styled.div`
     background-color: #1e1e1e;
     color: #cccccc;
     width: 100%;
-    display: flex;
+    display: flow-root;
     flex: 8;
     padding-left: 90px;
     padding-right: 90px;
@@ -190,6 +190,23 @@ export const Modal = styled.div`
     }
   }
 
+  .progress {
+    height: 5px;
+  }
+
+  .qrcode-area {
+    padding: 6px;
+    border-radius: 8px;
+    width: 134px;
+    height: 140px;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    svg {
+      font-size: 72px;
+    }
+  }
   .divisor {
     border: 1px solid #fff;
     margin-top: -4px;

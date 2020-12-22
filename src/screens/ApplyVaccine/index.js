@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
+import QRCode from "qrcode.react";
 import Loader from "../../components/Loader";
-import { FiEye, FiEyeOff, FiArrowLeft } from "react-icons/fi";
+import { FiEye, FiEyeOff, FiX, FiSlash } from "react-icons/fi";
 import {
   FaSyringe,
   FaCalendarDay,
@@ -11,7 +12,8 @@ import {
   FaUserShield,
   FaShieldAlt,
   FaVial,
-  FaNotesMedical
+  FaNotesMedical,
+  FaQrcode
 } from "react-icons/fa";
 import VaccineService from "../../services/VaccineService";
 import { Dot, Description, TextDescription, Modal } from "./styles";
@@ -53,10 +55,19 @@ const ApplyVaccine = () => {
   const [applyVaccine, setApplyVaccine] = useState(null);
   const [lot, setLot] = useState("");
   const [password, setPassword] = useState("");
+  const [code, setCode] = useState(null);
+  const [invalidCode, setInvalidCode] = useState(true);
+  const [progress, setProgess] = useState(0);
   const [loading, setLoading] = useState(true);
+
+  let secondsSpent = 0;
 
   useEffect(() => {
     setApplyVaccine(null);
+    setLot("");
+    setPassword("");
+    setCode(null);
+    setInvalidCode(true);
   }, [selectedVaccine]);
 
   const onSearch = query => {
@@ -152,6 +163,29 @@ const ApplyVaccine = () => {
     event.stopPropagation();
   };
 
+  const onFormLotSubmit = event => {
+    event.preventDefault();
+    event.stopPropagation();
+    const code = btoa("userId@vaccineId@lote@transactionId@datetime");
+    setCode();
+    setProgess(0);
+    setInvalidCode(false);
+    progressInterval();
+  };
+
+  const progressInterval = () => {
+    const EXPIRES_IN_15_MINUTES = 1000 * 60;
+
+    const interval = setInterval(() => {
+      if (secondsSpent > EXPIRES_IN_15_MINUTES / 1000) {
+        clearInterval(interval);
+        setInvalidCode(true);
+      }
+      secondsSpent++;
+      setProgess((secondsSpent * 100 * 1000) / EXPIRES_IN_15_MINUTES);
+    }, 1000);
+  };
+
   const showAllVacines = () => {
     setQuery("");
     setListOfDisplayedVaccines(vaccines);
@@ -222,29 +256,32 @@ const ApplyVaccine = () => {
 
   const buildApplyVaccineinfo = () =>
     applyVaccine && (
-      <div>
-        <h4>
-          <FaInfoCircle />
-          RESUMO DA VACINA
-        </h4>
-        <ul>{buildVaccineDetail(selectedVaccine)}</ul>
-        <hr />
+      <div className="d-flex col-12">
+        <form onSubmit={onFormLotSubmit} className="col-5">
+          <h4>
+            <FaInfoCircle />
+            RESUMO DA VACINA
+          </h4>
+          <ul>{buildVaccineDetail(selectedVaccine)}</ul>
+          <hr />
 
-        <h4>
-          <FaSyringe />
-          LOTE DA VACINA
-        </h4>
-        <input
-          className="form-control mr-2 btn-sm"
-          type="search"
-          id="lot"
-          value={lot}
-          onChange={event => setLot(event.target.value)}
-          placeholder="Lote da vacina a ser aplicada"
-          aria-label="Search"
-        />
-        <hr />
-
+          <h4>
+            <FaSyringe />
+            LOTE DA VACINA
+          </h4>
+          <input
+            className="form-control mr-2 btn-sm"
+            type="search"
+            id="lot"
+            disabled={code}
+            value={lot}
+            required
+            onChange={event => setLot(event.target.value)}
+            placeholder="Lote da vacina a ser aplicada"
+            aria-label="Search"
+          />
+          <hr />
+          {/*
         <h4>
           <FaShieldAlt />
           CONFIRMAÇÃO DE SEGURANÇA
@@ -257,10 +294,63 @@ const ApplyVaccine = () => {
           onChange={event => setPassword(event.target.value)}
           placeholder="Confirme sua senha"
           aria-label="Search"
-        />
-        <button className="generate-code btn btn-primary active btn-block mt-3">
-          GERAR CÓDIGO
-        </button>
+        /> */}
+          <button
+            className="generate-code btn btn-primary active btn-block mt-3"
+            disabled={code}
+          >
+            GERAR CÓDIGO
+          </button>
+        </form>
+        <span className="col-2" />
+        <form className="col-5">
+          <h4>
+            <FaShieldAlt />
+            CONFIRMAÇÃO DE SEGURANÇA
+          </h4>
+          <input
+            className="form-control mr-2 btn-sm"
+            type="password"
+            value={password}
+            id="password"
+            onChange={event => setPassword(event.target.value)}
+            placeholder="Confirme sua senha"
+            aria-label="Search"
+          />
+          <hr />
+          <h4>
+            <FaQrcode />
+            QRCode
+          </h4>
+          <div className="d-flex">
+            <div>
+              <div className="qrcode-area">
+                {!invalidCode ? (
+                  <QRCode value="http://facebook.github.io/react/" />
+                ) : (
+                  <FiSlash />
+                )}
+              </div>
+              {!invalidCode && (
+                <div class="progress mt-2">
+                  <div
+                    class="progress-bar progress-bar-striped bg-success"
+                    role="progressbar"
+                    style={{ width: 100 - progress + "%" }}
+                  />
+                </div>
+              )}
+            </div>
+            <div className="d-flex col">
+              <button className="btn btn-success active btn-sm">
+                GERAR NOVO CÓDIGO
+              </button>
+              <button className="btn btn-warning active btn-sm mt-2">
+                CANCELAR
+              </button>
+            </div>
+          </div>
+        </form>
       </div>
     );
 
@@ -398,7 +488,7 @@ const ApplyVaccine = () => {
             className="close btn btn-link"
             onClick={() => setSelectedVaccine(null)}
           >
-            <FiArrowLeft />
+            <FiX />
           </button>
           <div className="detail">
             <h1 className="modal-title d-flex mb-1">
@@ -417,29 +507,40 @@ const ApplyVaccine = () => {
         </div>
 
         <div className="body">
-          <div>
-            <div className="row">
-              {buildInfoSection()}
-              {buildApplyVaccineinfo()}
-            </div>
+          <div className="row">
+            {buildInfoSection()}
+            {buildApplyVaccineinfo()}
           </div>
         </div>
-        <div className="footer py-4">
-          <button
-            type="button"
-            className="btn btn-outline-danger mr-4"
-            onClick={() => setSelectedVaccine(null)}
-          >
-            Cancelar
-          </button>
-          <button
-            type="button"
-            className="btn btn-success active mr-4"
-            onClick={() => setApplyVaccine(true)}
-          >
-            Aplicar vacina
-          </button>
-        </div>
+
+        {!applyVaccine ? (
+          <div className="footer py-4">
+            <button
+              type="button"
+              className="btn btn-outline-danger mr-4"
+              onClick={() => setSelectedVaccine(null)}
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              className="btn btn-success active mr-4"
+              onClick={() => setApplyVaccine(true)}
+            >
+              Aplicar vacina
+            </button>
+          </div>
+        ) : (
+          <div className="footer py-4">
+            <button
+              type="button"
+              className="btn btn-outline-danger mr-4"
+              onClick={() => setApplyVaccine(null)}
+            >
+              Voltar
+            </button>
+          </div>
+        )}
       </Modal>
     </div>
   );
