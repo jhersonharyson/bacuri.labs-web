@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
-import QRCode from "qrcode.react";
+import QRCode from "react-qr-code";
 import Loader from "../../components/Loader";
-import { FiEye, FiEyeOff, FiX, FiSlash } from "react-icons/fi";
+import { FiEye, FiPackage, FiX, FiSlash } from "react-icons/fi";
 import {
   FaSyringe,
   FaCalendarDay,
@@ -279,17 +279,24 @@ const ApplyVaccine = () => {
             <FaSyringe />
             LOTE DA VACINA
           </h4>
-          <input
-            className="form-control mr-2 btn-sm"
-            type="search"
-            id="lot"
-            disabled={code}
-            value={lot}
-            required
-            onChange={event => setLot(event.target.value)}
-            placeholder="Lote da vacina a ser aplicada"
-            aria-label="Search"
-          />
+          {!code ? (
+            <input
+              className="form-control mr-2 btn-sm"
+              type="search"
+              id="lot"
+              value={lot}
+              required
+              onChange={event => setLot(event.target.value)}
+              placeholder="Lote da vacina a ser aplicada"
+              aria-label="Search"
+            />
+          ) : (
+            <ul>
+              <li>
+                <FiPackage /> {lot}
+              </li>
+            </ul>
+          )}
           <hr />
           {/*
         <h4>
@@ -305,12 +312,12 @@ const ApplyVaccine = () => {
           placeholder="Confirme sua senha"
           aria-label="Search"
         /> */}
-          <button
-            className="generate-code btn btn-primary active btn-block mt-3"
-            disabled={code}
-          >
-            GERAR CÓDIGO
-          </button>
+          {!code && (
+            <button className="generate-code btn btn-primary active btn-block mt-3">
+              <FaQrcode style={{ marginTop: "-3px", marginRight: "6px" }} />
+              GERAR CÓDIGO
+            </button>
+          )}
         </form>
         <span className="col-2" />
         {code && (

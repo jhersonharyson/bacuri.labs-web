@@ -201,8 +201,8 @@ export const Modal = styled.div`
   .qrcode-area {
     padding: 6px;
     border-radius: 8px;
-    width: 134px;
-    height: 140px;
+    // width: 134px;
+    // height: 140px;
     background-color: #fff;
     display: flex;
     flex-direction: column;
