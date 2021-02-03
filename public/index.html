@@ -11,6 +11,7 @@
 <script>
 	document.data = { data: {} };
     window.onload = () => {
+      window.newMarker = []
       var baseLayer = L.tileLayer(
         "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
         {
@@ -45,7 +46,7 @@
     console.log(e)
 
     let deleteBtn = document.createElement('button');
-    deleteBtn.innerText = 'Deleter Posto';
+    deleteBtn.innerText = 'Deletar Posto';
     deleteBtn.className = "btn btn-danger btn-sm"
     deleteBtn.style = "color: #fff; background-color: #bb2d3b; border-color: #b02a37;"
     deleteBtn.onclick =  function() {
@@ -93,14 +94,14 @@
     const postName = document.createElement('input')
     postName.id = 'post-name_'+newId;
     postName.className="form-control"
-    postName.style = "width: auto; margin-bottom: 16px;";
+    postName.style = "width: auto; margin-bottom: 16px; background-color: #fff; color: #000";
     postName.placeholder = "Nome do posto"
 
     const postVaccines = document.createElement('input')
     postVaccines.id = 'post-vaccine_'+newId;
     postVaccines.className="form-control"
     postVaccines.type = "number"
-    postVaccines.style = "width: auto; margin-bottom: 16px;";
+    postVaccines.style = "width: auto; margin-bottom: 16px; background-color: #fff; color: #000";
     postVaccines.placeholder = "Quantidade de vacinas"
 
     container.appendChild(header)
