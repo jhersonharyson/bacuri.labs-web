@@ -1,1 +1,123 @@
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+	integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+	crossorigin="" />
+
+<!-- Make sure you put this AFTER Leaflet's CSS -->
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+	integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+	crossorigin=""></script>
+
+
+<script>
+	document.data = { data: {} };
+    window.onload = () => {
+      var baseLayer = L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+          attribution: "",
+          maxZoom: 30
+        }
+      );
+
+
+      document.leaflet = async () => {
+        console.log(L);
+          window.map = new L.Map("map-canvas", {
+          center: new L.LatLng(-1.4502277, -48.4774305),
+          zoom: 14,
+          layers: [baseLayer]
+        });
+        function addMarker(e){
+    // Add marker to map at click location; add popup window
+     // check
+    //  if(window.newMarker)
+    //     window.map.removeLayer(window.newMarker); // remove
+   
+    if(window.newMarker == null){
+      window.newMarker = []
+    }
+    
+    var newMarker = new L.marker(e.latlng).addTo(map);
+    const newId = Date.now()
+
+    window.newMarker.push({id: newId, marker: newMarker})
+
+    console.log(e)
+
+    let deleteBtn = document.createElement('button');
+    deleteBtn.innerText = 'Deleter Posto';
+    deleteBtn.className = "btn btn-danger btn-sm"
+    deleteBtn.style = "color: #fff; background-color: #bb2d3b; border-color: #b02a37;"
+    deleteBtn.onclick =  function() {
+      const marker = window.newMarker.filter(m => m.id == newId)[0]
+      console.log({a: window.newMarker, newId})
+      window.map.removeLayer(marker.marker)
+      window.newMarker = window.newMarker.filter(m => m.id != newId)
+    }
+
+    let closeBtn = document.createElement('button');
+    closeBtn.innerText = 'Limpar';
+    closeBtn.className = "btn btn-succes btn-sm"
+    closeBtn.style = "color: #fff; background-color: #ffc107; border-color: #ffc107;"
+    closeBtn.onclick =  function() {
+  
+      document.querySelector('#post-vaccine_'+newId).value = ''
+      document.querySelector('#post-name_'+newId).value = ''
+
+      document.querySelector(".leaflet-popup-close-button").click();
+    }
+
+    let saveBtn = document.createElement('button');
+    saveBtn.innerText = 'Salvar';
+    saveBtn.className = "btn btn-success btn-sm"
+    saveBtn.style = "color: #fff; background-color: #198754; border-color: #198754;"
+    saveBtn.onclick =  function() {
+      document.querySelector(".leaflet-popup-close-button").click();
+    }
+
+    const actions = document.createElement('div')
+    actions.style = "display: flex; justify-content: space-between"
+    actions.appendChild(saveBtn)
+    actions.appendChild(closeBtn)
+    actions.appendChild(deleteBtn)
+
+    const container = document.createElement('div')
+    const header = document.createElement('h5')
+    header.innerText = 'Posto N°'+newId
+    const latlon = document.createElement('p')
+    latlon.innerText = `Lat: ${e.latlng.lat} | Lon: ${e.latlng.lng}`
+
+    const form = document.createElement('div')
+    form.style = "display: flex; flex-direction: column"
+
+    const postName = document.createElement('input')
+    postName.id = 'post-name_'+newId;
+    postName.className="form-control"
+    postName.style = "width: auto; margin-bottom: 16px;";
+    postName.placeholder = "Nome do posto"
+
+    const postVaccines = document.createElement('input')
+    postVaccines.id = 'post-vaccine_'+newId;
+    postVaccines.className="form-control"
+    postVaccines.type = "number"
+    postVaccines.style = "width: auto; margin-bottom: 16px;";
+    postVaccines.placeholder = "Quantidade de vacinas"
+
+    container.appendChild(header)
+    container.appendChild(latlon)
+    form.appendChild(postName)
+    form.appendChild(postVaccines)
+    container.appendChild(form)
+
+    container.appendChild(actions)
+    
+    newMarker.bindPopup(container);
+    
+
+  }
+        window.map.on('click', addMarker);
+      };
+    };
+</script>
+
 <div id="root"></div>

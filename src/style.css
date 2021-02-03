@@ -20,3 +20,9 @@ html {
 #root {
   flex: 1;
 }
+
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background-color: #1c1f2b;
+  color: #fff;
+}

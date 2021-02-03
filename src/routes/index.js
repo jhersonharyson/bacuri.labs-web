@@ -4,6 +4,7 @@ import PrivateRoute from "../components/PrivateRoute";
 
 import Login from "../screens/Login";
 import ApplyVaccine from "../screens/ApplyVaccine";
+import Campaign from "../screens/Campaign";
 import NotFound from "../screens/NotFound";
 import AuthService from "../services/AuthService";
 
@@ -20,6 +21,12 @@ const Routes = () => {
         component={ApplyVaccine}
         exact
         path="/apply"
+        layout={MainLayout}
+      />
+      <PrivateRoute
+        component={Campaign}
+        exact
+        path="/campaign"
         layout={MainLayout}
       />
       <Route component={Login} exact path="/sign-in" />
