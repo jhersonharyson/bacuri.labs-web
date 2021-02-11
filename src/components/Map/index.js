@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FiX, FiSave, FiChevronsLeft, FiChevronsDown } from "react-icons/fi";
+import "./styles.css";
+
 export function Map(props) {
   const [render, setRender] = useState(false);
   const [posts, setPosts] = useState([]);
@@ -14,8 +16,20 @@ export function Map(props) {
         const list = window.newMarker || [];
         setPosts(
           list.map(m => {
-            const name = document.querySelector("#post-name_" + m.id)?.value;
-            return name || m.id;
+            const postName = document.querySelector("#post-name_" + m.id);
+            const postVaccine = document.querySelector("#post-vaccine_" + m.id);
+            let name = posts?.filter(p => p.id == m.id)[0]?.name;
+            let vaccine = posts?.filter(p => p.id == m.id)[0]?.vaccine;
+
+            if (postVaccine != null) {
+              vaccine = postVaccine.value;
+            }
+
+            if (postName != null) {
+              name = postName.value;
+            }
+
+            return { name, id: m.id, vaccine };
           })
         );
       }, 1500);
@@ -66,21 +80,23 @@ export function Map(props) {
           </button>
 
           <div
+            className={minimize ? "0" : "card"}
             style={{
-              width: minimize ? "60px" : "400px",
-              minHeight: "400px",
-              borderRadius: minimize ? "0" : "8px",
-              backgroundColor: "#393a3cf2",
+              width: minimize ? "45px" : "400px",
+              minHeight: minimize ? "100vh" : "400px",
+              borderRadius: minimize && "0",
+              backgroundColor: minimize ? "#393a3c" : "#393a3cf2",
               position: "absolute",
               outline: "none",
-              top: minimize ? "80px" : "10px",
+              top: minimize ? "0" : "10px",
               left: minimize ? "0" : "60px",
               zIndex: render ? "100001" : "-100000",
               display: "flex",
-              padding: "16px",
+              paddingLeft: minimize && "24px",
+              marginTop: minimize && "-24px",
               flexDirection: "column",
               color: "#000",
-              boxShadow: "#a1939382 5px 5px 24px;",
+              boxShadow: "#a19393 5px 5px 24px;",
               transition: "1s"
             }}
           >
@@ -95,7 +111,7 @@ export function Map(props) {
                 }}
                 className="heading heading-light d-flex justify-content-between"
               >
-                NOVA CAMPANHA{" "}
+                <span className="highlight">NOVA</span> CAMPANHA{" "}
                 <FiChevronsDown
                   size={32}
                   style={{ marginTop: "-4px" }}
@@ -113,7 +129,9 @@ export function Map(props) {
                 }}
                 className="heading heading-light d-flex justify-content-between"
               >
-                NOVA CAMPANHA{" "}
+                <span>
+                  <span className="highlight">NOVA</span> CAMPANHA{" "}
+                </span>
                 <FiChevronsLeft
                   size={32}
                   style={{ marginTop: "-4px" }}
@@ -180,9 +198,9 @@ export function Map(props) {
                     {posts.map(p => (
                       <span
                         className="badge bg-secondary mb-1"
-                        style={{ width: "150px" }}
+                        style={{ width: "49%" }}
                       >
-                        {p} <FiX />
+                        {p.name + " - " + p.id} <FiX />
                       </span>
                     ))}
                   </div>

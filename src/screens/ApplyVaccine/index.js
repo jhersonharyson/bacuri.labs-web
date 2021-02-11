@@ -173,9 +173,11 @@ const ApplyVaccine = () => {
     event.preventDefault();
     event.stopPropagation();
     const code = btoa(
-      `${UserService.getUser().dependentProfiles[0].id}@${
+      `professionalId=${
+        UserService.getUser().dependentProfiles[0].id
+      }&vaccineId=${
         selectedVaccine.id
-      }@${lot}@transactionId@${new Date().getTime()}`
+      }&lot=${lot}&transactionId=${new Date().getTime()}`
     );
     setCode(code);
     setProgess(0);

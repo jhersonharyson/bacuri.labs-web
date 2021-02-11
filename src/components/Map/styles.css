@@ -1,0 +1,16 @@
+.card {
+  animation: fadeIn 1.5s ease forwards;
+}
+
+.highlight {
+  color: #fdc654;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
