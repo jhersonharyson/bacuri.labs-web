@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { Link } from "react-router-dom";
 import QRCode from "react-qr-code";
 import Loader from "../../components/Loader";
 import { FiEye, FiPackage, FiX, FiSlash } from "react-icons/fi";
@@ -60,6 +61,13 @@ const ApplyVaccine = () => {
   const [invalidCode, setInvalidCode] = useState(true);
   const [progress, setProgess] = useState(0);
   const [loading, setLoading] = useState(true);
+
+  const history = [
+    { patient: "027.780.782-40", date: "24/07/2021 08:46:16" },
+    { patient: "505.665.318-79", date: "05/08/2020 08:46:16" },
+    { patient: "621.876.737-07", date: "03/08/2021 08:46:16" },
+    { patient: "802.080.869-86", date: "04/09/2021 08:46:16" }
+  ];
 
   let secondsSpent = 0;
   let interval;
@@ -173,7 +181,7 @@ const ApplyVaccine = () => {
     event.preventDefault();
     event.stopPropagation();
     const code = btoa(
-      `professionalId=${
+      `professionalProfileId=${
         UserService.getUser().dependentProfiles[0].id
       }&vaccineId=${
         selectedVaccine.id
@@ -402,42 +410,61 @@ const ApplyVaccine = () => {
               <input
                 className="form-control"
                 id="search"
-                placeholder="Search..."
+                placeholder="Pesquisa..."
               />
               <button className="btn-search">
                 <i className="fa fa-lg fa-search" />
               </button>
             </li>
-            <li className="nav-text">Vaccines</li>
+            <li className="nav-text">Histórico</li>
             <li>
-              <div className="active" href="#">
-                Overview
+              {history.map(d => (
+                <div className="activee" href="#">
+                  <strong>{d.patient}</strong>
+                  <br />
+                  <span style={{ fontSize: "12px" }}>{d.date}</span>
+                </div>
+              ))}
+            </li>
+            <li>
+              <p
+                className="mx-2 mt-3 mb-0 text-muted text-uppercase mb-1"
+                style={{ fontSize: "12px" }}
+              >
+                Mais{" "}
+                <strong className="mx-1" style={{ color: "#fff" }}>
+                  {" "}
+                  7.812{" "}
+                </strong>{" "}
+                registros
+              </p>
+            </li>
+            <li>
+              <div
+                className="btn-outline-light btn-sm mx-2 mt-0 mb-0"
+                style={{ textAlign: "center", border: ".5px solid #fff" }}
+              >
+                Mostrar mais
               </div>
             </li>
             <li>
-              <div href="#">Order history</div>
+              <div className="divider mt-3 ml-0 pl-1 mr-2 mb-2" />
             </li>
+            <li className="nav-text">Mais</li>
             <li>
-              <div href="#">Fluid layout</div>
-            </li>
-            <li>
-              <div href="#">Icon nav</div>
-            </li>
-            <li className="nav-text">More</li>
-            <li>
-              <div href="#">Toolkit docs</div>
-            </li>
-            <li>
-              <div href="#">Bootstrap docs</div>
-            </li>
-            <li>
-              <div href="#">Light UI</div>
-            </li>
-            <li>
-              <div href="#">Example modal</div>
-            </li>
-            <li>
-              <div className="divider" />
+              <div href="#" />
+              <Link
+                className="btn-warning btn-sm mx-2 mt-0 mb-0"
+                style={{
+                  textAlign: "center",
+                  border: "2px solid #fff",
+                  color: "#000",
+                  fontWeight: "bolder"
+                }}
+                to="/campaign"
+              >
+                Ver Campanhas
+              </Link>
             </li>
           </ul>
         </nav>
@@ -467,7 +494,23 @@ const ApplyVaccine = () => {
           </form>
         </div>
 
-        <div className="divider" />
+        <div className="divider mb-4" />
+        <div className="row justify-content-start">
+          <div
+            class="btn-outline-light active btn-lg ml-4 mt-3 mb-5 col-2"
+            style={{ textAlign: "center", border: "1px solid #fff" }}
+          >
+            Vacinas
+          </div>
+
+          <Link
+            to="/campaign"
+            class="btn-outline-light ml-3 btn-lg mt-3 mb-5 col-2"
+            style={{ textAlign: "center", border: "1px solid #fff" }}
+          >
+            Campanhas
+          </Link>
+        </div>
 
         <div className="row">
           <div className="col list-container">
@@ -479,7 +522,7 @@ const ApplyVaccine = () => {
             <div className="d-grid gap-2 d-md-block mb-5">
               {vaccines.length != listOfDisplayedVaccines.length && (
                 <button className="btn primary btn-sm" onClick={showAllVacines}>
-                  View all vaccines
+                  Ver todas as vacinas
                 </button>
               )}
             </div>

@@ -14,3 +14,7 @@
     opacity: 1;
   }
 }
+
+#content > div {
+  width: 100%;
+}

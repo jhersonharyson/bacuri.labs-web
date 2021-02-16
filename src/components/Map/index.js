@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { FiX, FiSave, FiChevronsLeft, FiChevronsDown } from "react-icons/fi";
+
+import Carousel from "../Carousel";
+
 import "./styles.css";
 
 export function Map(props) {
@@ -37,16 +40,28 @@ export function Map(props) {
   }, []);
   return (
     <>
-      <button
-        className="btn btn-primary"
-        onClick={() => {
-          window.onload();
-          document.leaflet();
-          setRender(true);
-        }}
-      >
-        Posicionar Postos
-      </button>
+      <div className="col ml-0 pl-0" style={{ width: "100%" }}>
+        <div className="row fluid header">
+          <div className="label">
+            <span>Campanhas</span>
+            <div className="d-flex justify-content-between" style={{ flex: 1 }}>
+              <h2>Campanhas de vacinação</h2>
+              <button
+                className="btn btn-primary"
+                onClick={() => {
+                  window.onload();
+                  document.leaflet();
+                  setRender(true);
+                }}
+              >
+                Criar uma nova campanha
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className="divider" />
+        <Carousel />
+      </div>
       <div
         id="map-canvas"
         style={{
@@ -119,7 +134,14 @@ export function Map(props) {
                 />
               </h4>
             </div>
-            <div style={{ display: minimize ? "none" : "" }}>
+            <div
+              style={{
+                display: minimize ? "none" : "flex",
+                height: "100%",
+                flexDirection: "column",
+                flex: 1
+              }}
+            >
               <h4
                 style={{
                   marginTop: "16px",
@@ -140,83 +162,106 @@ export function Map(props) {
               </h4>
               <hr style={{ borderTopColor: "#fff" }} />
               <div
-                className="d-flex col p-0 m-0 mt-2 mr-1"
-                style={{ color: "#fff" }}
+                className="d-flex col justify-content-between"
+                style={{ height: "100%" }}
               >
-                <label>Camapnha</label>
-                <input
-                  placeholder="Nome da campanha"
-                  className="form-control"
-                  style={{
-                    width: "auto",
-                    height: "15px",
-                    backgroundColor: "#fff",
-                    color: "#000"
-                  }}
-                />
-
-                <div className="d-flex" style={{ color: "#fff" }}>
-                  <div className="d-flex col-4 col p-0 m-0 mt-2 mr-1">
-                    <label>Início</label>
-                    <input
-                      placeholder="Nome da campanha"
-                      className="form-control"
-                      style={{
-                        height: "15px",
-                        width: "auto",
-                        backgroundColor: "#fff",
-                        color: "#000"
-                      }}
-                      type="date"
-                    />
-                  </div>
-
-                  <div className="d-flex col-4 col p-0 m-0 mt-2 ml-1">
-                    <label>Fim</label>
-                    <input
-                      placeholder="Nome da campanha"
-                      className="form-control"
-                      style={{
-                        height: "15px",
-                        width: "auto",
-                        backgroundColor: "#fff",
-                        color: "#000"
-                      }}
-                      type="date"
-                    />
-                  </div>
-                </div>
-                <div className="d-flex col m-0 p-0 mt-2">
-                  <label>Postos</label>
-                  <div
+                <div
+                  className="d-flex col p-0 m-0 mt-2 mr-1"
+                  style={{ color: "#fff" }}
+                >
+                  <label>Camapnha</label>
+                  <input
+                    placeholder="Nome da campanha"
+                    className="form-control"
                     style={{
-                      display: "flex",
-                      flexWrap: "wrap",
-                      justifyContent: "space-between"
+                      width: "auto",
+                      height: "15px",
+                      backgroundColor: "#fff",
+                      color: "#000"
                     }}
-                  >
-                    {posts.map(p => (
+                  />
+
+                  <div className="d-flex" style={{ color: "#fff" }}>
+                    <div className="d-flex col-4 col p-0 m-0 mt-2 mr-1">
+                      <label>Início</label>
+                      <input
+                        placeholder="Nome da campanha"
+                        className="form-control"
+                        style={{
+                          height: "15px",
+                          width: "auto",
+                          backgroundColor: "#fff",
+                          color: "#000"
+                        }}
+                        type="date"
+                      />
+                    </div>
+
+                    <div className="d-flex col-4 col p-0 m-0 mt-2 ml-1">
+                      <label>Fim</label>
+                      <input
+                        placeholder="Nome da campanha"
+                        className="form-control"
+                        style={{
+                          height: "15px",
+                          width: "auto",
+                          backgroundColor: "#fff",
+                          color: "#000"
+                        }}
+                        type="date"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="d-flex col m-0 p-0 mt-2">
+                    <label>Imagem da campanha</label>
+                    <input type="file" style={{ color: "#fff" }} />
+                  </div>
+
+                  {posts.length > 0 && (
+                    <div className="d-flex col m-0 p-0 mt-2">
+                      <label>Postos</label>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexWrap: "wrap"
+                          // justifyContent: "space-between"
+                        }}
+                      >
+                        {/* posts.map(p => (
                       <span
                         className="badge bg-secondary mb-1"
                         style={{ width: "49%" }}
                       >
                         {p.name + " - " + p.id} <FiX />
                       </span>
-                    ))}
-                  </div>
+                    )) */}
+                        <strong
+                          className="mr-3"
+                          style={{ fontWeight: "bolder" }}
+                        >
+                          {posts.length}
+                        </strong>{" "}
+                        postos adicionados a campanha
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="d-flex">
+                  <button
+                    style={{
+                      outline: "none",
+                      backgroundColor: "#198754",
+                      marginTop: "16px",
+                      width: "100%"
+                    }}
+                    className="btn btn-success btn-block"
+                  >
+                    <FiSave color="#fff" /> Salvar nova campanha
+                  </button>
                 </div>
               </div>
-
-              <div />
-              <button
-                style={{
-                  outline: "none",
-                  backgroundColor: "#198754"
-                }}
-                className="btn btn-success"
-              >
-                <FiSave color="#fff" /> Salvar nova campanha
-              </button>
             </div>
           </div>
         </div>

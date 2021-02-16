@@ -1,5 +1,6 @@
 import React from "react";
 import AuthService from "../../services/AuthService";
+import { Link } from "react-router-dom";
 import { Container, Dropdown, DropdownMenu, DropdownButton } from "./styles.js";
 
 const MainLayout = ({ children: Content }) => {
@@ -11,7 +12,14 @@ const MainLayout = ({ children: Content }) => {
     AuthService.logout();
   };
   return (
-    <Container>
+    <Container
+      style={{
+        display: "flex",
+        flex: 1,
+        flexDirection: "column",
+        height: "100%"
+      }}
+    >
       <nav className="navbar navbar-expand-md navbar-dark bg-dark fixed-top p-1 mr-0">
         <div className="container-fluid">
           <a className="navbar-brand" href="#">
@@ -33,26 +41,35 @@ const MainLayout = ({ children: Content }) => {
 
           <div className="collapse navbar-collapse" id="navbarsExampleDefault">
             <ul className="navbar-nav mr-auto mb-2 mb-md-0">
-              <li className="nav-item active">
-                <a className="nav-link" aria-current="page" href="#">
-                  Home
-                </a>
+              <li className="nav-item">
+                <Link
+                  className="nav-link"
+                  style={{ color: "#fff", fontWeight: "bolder" }}
+                  aria-current="page"
+                  to="/apply"
+                >
+                  Vacinas
+                </Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#">
-                  Link
-                </a>
+                <Link
+                  className="nav-link"
+                  style={{ color: "#fff", fontWeight: "bolder" }}
+                  to="/campaign"
+                >
+                  Campanhas
+                </Link>
               </li>
             </ul>
             <form className="d-flex" onSubmit={onSubmit}>
               <input
                 className="form-control mr-2 btn-sm"
                 type="search"
-                placeholder="Search"
+                placeholder="Busque por todo o site"
                 aria-label="Search"
               />
               <button className="btn btn-outline-success btn-sm" type="submit">
-                Search
+                Encontrar
               </button>
             </form>
 
@@ -66,11 +83,11 @@ const MainLayout = ({ children: Content }) => {
                   <hr />
                 </li>
                 <li>
-                  <button className="dropdown-item">Profile</button>
+                  <button className="dropdown-item">Perfil</button>
                 </li>
                 <li>
                   <button className="dropdown-item" onClick={logout}>
-                    Exit
+                    Sair
                   </button>
                 </li>
               </DropdownMenu>
@@ -78,12 +95,17 @@ const MainLayout = ({ children: Content }) => {
           </div>
         </div>
       </nav>
-      <main id="content" className="container mt-4">
+      <main
+        id="content"
+        className="container mt-4"
+        style={{ display: "flex", flex: 1, overflow: "unset" }}
+      >
         {Content}
       </main>
-      <footer>
-        <div className="container text-center">
-          Designed with love by J. Haryson && D. Duarte
+      <footer style={{ display: "flex" }}>
+        <div className="container text-center d-flex justify-content-center">
+          Designed with love by <strong className="mx-1">J. Haryson</strong> &&{" "}
+          <strong className="mx-1">D. Duarte</strong>
         </div>
       </footer>
     </Container>
