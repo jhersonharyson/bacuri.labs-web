@@ -185,7 +185,9 @@ const ApplyVaccine = () => {
         UserService.getUser().dependentProfiles[0].id
       }&vaccineId=${
         selectedVaccine.id
-      }&lot=${lot}&transactionId=${new Date().getTime()}`
+      }&lot=${lot}&transactionId=${new Date().getTime()}_${
+        UserService.getUser().dependentProfiles[0].id
+      }`
     );
     setCode(code);
     setProgess(0);
