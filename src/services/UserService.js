@@ -14,7 +14,7 @@ class UserService {
       const { content } = response.data;
       this.user = content;
       localStorage.setItem("user", JSON.stringify(content));
-      return user;
+      return this.user;
     } catch (e) {
       console.log(e);
     }
