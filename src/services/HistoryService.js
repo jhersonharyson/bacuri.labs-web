@@ -11,7 +11,7 @@ class HistoryService {
 
   async getAll() {
     try {
-      const response = await axios.get(this.URL.HISTORY);
+      const response = await axios.get(this.URL.ALL_HISTORY);
       const { content } = response.data;
       return content;
     } catch (e) {
@@ -21,7 +21,7 @@ class HistoryService {
 
   async getMyHistory() {
     try {
-      const response = await axios.get(this.URL.ALL_HISTORY);
+      const response = await axios.get(this.URL.HISTORY);
       const { content } = response.data;
       return content;
     } catch (e) {

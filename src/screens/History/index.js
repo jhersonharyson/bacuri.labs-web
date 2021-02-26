@@ -131,27 +131,62 @@ const History = () => {
 
   const buildDosageLabel = dosage => DOSAGE[dosage];
 
-  const listItem = (vaccine, key) => (
+  const listItem = (history, key) => (
     <div className="item" key={key}>
       <Description>
-        {vaccine.name}
-        <Dot />
-        <span className={badgeClass(vaccine.range)}>
-          {RANGE[vaccine.range]}
-        </span>
-        <Dot />
-        <TextDescription>
-          {buildInitialRangeLabel(vaccine.initialRange)}
+        <TextDescription
+          style={{ color: "#fff" }}
+          className="badge btn-success"
+        >
+          Paciente{" "}
+          {`${history.patient.firstName[0]}${
+            history.patient.lastName[0]
+          }`.toUpperCase()}
         </TextDescription>
         <Dot />
-        <TextDescription>{DOSAGE[vaccine.dosage]}</TextDescription>
+        <span className="badge  alert-warning" style={{ color: "#000" }}>
+          Ministrado por #{history.professional.id}
+        </span>
+
+        <Dot />
+
+        <span className="badge btn-light" style={{ color: "#000" }}>
+          {history.vaccine.name} | {DOSAGE[history.vaccine.dosage]}{" "}
+        </span>
+
+        {history.campaign && (
+          <>
+            <Dot />
+            <span className="badge btn-light" style={{ color: "#000" }}>
+              Campanha {history.campaign.title}
+            </span>
+          </>
+        )}
       </Description>
-      <button
-        className="btn btn-link"
-        onClick={() => setSelectedVaccine(vaccine)}
+
+      <span
+        style={{
+          fontSize: "12px",
+          display: "flex",
+          alignItens: "center"
+        }}
       >
-        <FiEye />
-      </button>
+        <div>
+          <div>
+            {new Date(history.createAt).toLocaleDateString()}{" "}
+            {new Date(history.createAt).toLocaleTimeString()}
+          </div>
+          <span className="badge btn-warning" style={{ color: "#000" }}>
+            {`T${history.transactionId.split(",")[0]}#${history.patient.id}`}
+          </span>
+        </div>
+        <button
+          className="btn btn-link ml-5"
+          onClick={() => setSelectedHistory(history)}
+        >
+          <FiEye />
+        </button>
+      </span>
     </div>
   );
 
@@ -169,20 +204,20 @@ const History = () => {
     return () => {};
   }, []);
 
-  useEffect(() => {
-    const fetch = async () => {
-      setLoading(true);
-      const myId = UserService.getUser().id;
-      const filtered =
-        filter == "MY"
-          ? history.filter(h => (h.professional.id = myId))
-          : history;
-      setListOfDisplayedHistory(filtered);
-      setLoading(false);
-    };
-    fetch();
-    return () => {};
-  }, [filter]);
+  // useEffect(() => {
+  //   const fetch = async () => {
+  //     setLoading(true);
+  //     const myId = UserService.getUser().id;
+  //     const filtered =
+  //       filter == "MY"
+  //         ? history.filter(h => (h.professional.id = myId))
+  //         : history;
+  //     setListOfDisplayedHistory(filtered);
+  //     setLoading(false);
+  //   };
+  //   fetch();
+  //   return () => {};
+  // }, [filter]);
 
   const onSubmit = event => {
     event.preventDefault();
@@ -226,7 +261,7 @@ const History = () => {
   };
 
   const buildResultFeedback = () =>
-    `${listOfDisplayedHistory.length} vacinas encontradas ${
+    `${listOfDisplayedHistory.length} resultados encontradas ${
       !!query && !loading ? "para o termo '" + query + "'" : ""
     }`;
 
@@ -478,7 +513,7 @@ const History = () => {
         <div className="row fluid header">
           <div className="label">
             <span>Vacinas</span>
-            <h2>Aplicação</h2>
+            <h2>Histórico</h2>
           </div>
         </div>
         <div className="divider" />
