@@ -84,27 +84,35 @@ const History = () => {
   const onSearch = query => {
     setQuery(query);
 
-    const filtered = !query
-      ? history
-      : history.filter(h =>
-          [
-            h.patient.id,
-            h.campaign.id,
-            h.vaccine.name,
-            h.patient.firstName,
-            h.patient.lastName,
-            h.createAt
-          ].some(
-            text =>
-              text?.toLowerCase()?.includes(query?.toLowerCase()) &&
-              (filter == "MY"
-                ? h.professional.id == UserService.getUser().id
-                : true) &&
-              (filter == "RANGE"
-                ? h.createAt.toLowerCase()?.includes(range)
-                : true)
-          )
-        );
+    const filtered =
+      !query && filter == "ALL"
+        ? history
+        : history.filter(h =>
+            [
+              h.patient.id,
+              h.patient.firstName,
+              h.patient.lastName,
+              new Date(h.createAt).toLocaleDateString(),
+              h.professional.id,
+              h.campaign?.title
+            ]
+              .map(h => {
+                // console.log(`${h}`);
+                // alert(UserService.getUser().id);
+                return `${h}`;
+              })
+              .some(
+                text =>
+                  text &&
+                  text?.toLowerCase()?.includes(query?.toLowerCase()) &&
+                  (filter == "MY"
+                    ? h.professional.id == UserService.getUser().id
+                    : true) &&
+                  (filter == "RANGE"
+                    ? new Date(h.createAt).toLowerCase()?.includes(range)
+                    : true)
+              )
+          );
     setListOfDisplayedHistory(filtered);
   };
 
@@ -562,23 +570,38 @@ const History = () => {
         <div className="divider mb-4" />
         <div className="row justify-content-start">
           <div
-            class="btn-outline-light active btn-lg ml-4 mt-3 mb-5 col-2"
+            class={
+              "btn-outline-light btn-lg ml-4 mt-3 mb-5 col-2 " +
+              (filter == "MY" ? "active" : "")
+            }
             style={{ textAlign: "center", border: "1px solid #fff" }}
-            onClick={() => setFilter("MY")}
+            onClick={() => {
+              setFilter("MY");
+              setTimeout(() => onSearch(query), 600);
+            }}
           >
             Meus Registros
           </div>
 
           <div
-            class="btn-outline-light btn-lg ml-4 mt-3 mb-5 col-1"
+            class={
+              "btn-outline-light btn-lg ml-4 mt-3 mb-5 col-1 " +
+              (filter == "ALL" ? "active" : "")
+            }
             style={{ textAlign: "center", border: "1px solid #fff" }}
-            onClick={() => setFilter("ALL")}
+            onClick={() => {
+              setFilter("ALL");
+              setTimeout(() => onSearch(query), 600);
+            }}
           >
             Todos
           </div>
 
           <div
-            class="btn-outline-light btn-lg ml-4 mt-3 mb-5 col-1"
+            class={
+              "btn-outline-light btn-lg ml-4 mt-3 mb-5 col-1 " +
+              (filter == "RANGE" ? "active" : "")
+            }
             style={{ textAlign: "center", border: "1px solid #fff" }}
             onClick={() => setFilter("RANGE")}
           >
