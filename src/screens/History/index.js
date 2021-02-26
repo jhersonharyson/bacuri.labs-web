@@ -86,9 +86,23 @@ const History = () => {
 
     const filtered = !query
       ? history
-      : history.filter(vaccine =>
-          [vaccine.name, vaccine.preventedDiseases, vaccine.observation].some(
-            text => text?.toLowerCase()?.includes(query?.toLowerCase())
+      : history.filter(h =>
+          [
+            h.patient.id,
+            h.campaign.id,
+            h.vaccine.name,
+            h.patient.firstName,
+            h.patient.lastName,
+            h.createAt
+          ].some(
+            text =>
+              text?.toLowerCase()?.includes(query?.toLowerCase()) &&
+              (filter == "MY"
+                ? h.professional.id == UserService.getUser().id
+                : true) &&
+              (filter == "RANGE"
+                ? h.createAt.toLowerCase()?.includes(range)
+                : true)
           )
         );
     setListOfDisplayedHistory(filtered);
@@ -164,8 +178,12 @@ const History = () => {
               className="card btn-dark tooltip-text"
               style={{ color: "#fff" }}
             >
-              <strong>Campanha:</strong> {history.campaign.title} <br />
-              <strong>Descrição:</strong> {history.campaign.description}
+              <img
+                url={history.campaign.image}
+                style={{ width: "100%", height: "60px" }}
+              />
+              <strong>Campanha</strong> {history.campaign.title} <br />
+              <strong>Descrição</strong> {history.campaign.description}
             </span>
           </span>
         )}
