@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import AuthService from "../../services/AuthService";
+import UserService from "../../services/UserService";
 import { Link } from "react-router-dom";
 import { Container, Dropdown, DropdownMenu, DropdownButton } from "./styles.js";
 
 const MainLayout = ({ children: Content }) => {
+  const [username, setUsername] = useState("##");
+  const [shortUsername, setShortUsername] = useState("##");
+  const [registrationNumber, setRegistrationNumber] = useState("##");
   const onSubmit = event => {
     event.preventDefault();
     event.stopPropagation();
@@ -11,6 +15,13 @@ const MainLayout = ({ children: Content }) => {
   const logout = () => {
     AuthService.logout();
   };
+
+  useEffect(() => {
+    const { firstName, lastName, id } = UserService.getUser();
+    setUsername(`${firstName[0]}. ${lastName}`);
+    setShortUsername(`${firstName[0]}.${lastName[0]}`.toUpperCase());
+    setRegistrationNumber(id);
+  }, []);
   return (
     <Container
       style={{
@@ -70,6 +81,9 @@ const MainLayout = ({ children: Content }) => {
                 </Link>
               </li>
             </ul>
+            <div className="btn btn-outline-light mr-3">
+              Matrícula #{registrationNumber}
+            </div>
             <form className="d-flex" onSubmit={onSubmit}>
               <input
                 className="form-control mr-2 btn-sm"
@@ -84,11 +98,11 @@ const MainLayout = ({ children: Content }) => {
 
             <Dropdown className="ml-2">
               <DropdownButton className="btn-outline-primary">
-                JH
+                {shortUsername}
               </DropdownButton>
               <DropdownMenu className="dropdown-menu">
                 <li>
-                  <p className="text-center">Olá J. Haryson</p>
+                  <p className="text-center">Olá {username}</p>
                   <hr />
                 </li>
                 <li>

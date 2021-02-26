@@ -420,16 +420,6 @@ const History = () => {
             </button>
           </div>
           <ul>
-            <li className="search">
-              <input
-                className="form-control"
-                id="search"
-                placeholder="Pesquisa..."
-              />
-              <button className="btn-search">
-                <i className="fa fa-lg fa-search" />
-              </button>
-            </li>
             <li className="nav-text">Histórico</li>
             <li>
               {history.map(h => (
@@ -461,14 +451,6 @@ const History = () => {
                 </strong>{" "}
                 registros
               </p>
-            </li>
-            <li>
-              <div
-                className="btn-outline-light btn-sm mx-2 mt-0 mb-0"
-                style={{ textAlign: "center", border: ".5px solid #fff" }}
-              >
-                Mostrar mais
-              </div>
             </li>
             <li>
               <div className="divider mt-3 ml-0 pl-1 mr-2 mb-2" />
