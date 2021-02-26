@@ -60,6 +60,15 @@ const MainLayout = ({ children: Content }) => {
                   Campanhas
                 </Link>
               </li>
+              <li className="nav-item">
+                <Link
+                  className="nav-link"
+                  style={{ color: "#fff", fontWeight: "bolder" }}
+                  to="/history"
+                >
+                  Históricos
+                </Link>
+              </li>
             </ul>
             <form className="d-flex" onSubmit={onSubmit}>
               <input
