@@ -154,13 +154,20 @@ const History = () => {
           {history.vaccine.name} | {DOSAGE[history.vaccine.dosage]}{" "}
         </span>
 
-        {history.campaign && (
-          <>
+        {history.campaign != null && (
+          <span className="d-flex align-items-center tooltip-area">
             <Dot />
             <span className="badge btn-light" style={{ color: "#000" }}>
-              Campanha {history.campaign.title}
+              Campanha
             </span>
-          </>
+            <span
+              className="card btn-dark tooltip-text"
+              style={{ color: "#fff" }}
+            >
+              <strong>Campanha:</strong> {history.campaign.title} <br />
+              <strong>Descrição:</strong> {history.campaign.description}
+            </span>
+          </span>
         )}
       </Description>
 
