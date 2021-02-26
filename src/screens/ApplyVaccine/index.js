@@ -17,6 +17,7 @@ import {
   FaQrcode
 } from "react-icons/fa";
 import VaccineService from "../../services/VaccineService";
+import HistoryService from "../../services/HistoryService";
 import UserService from "../../services/UserService";
 import { Dot, Description, TextDescription, Modal } from "./styles";
 import "./styles.scss";
@@ -51,6 +52,8 @@ const ICONS = [
 
 const ApplyVaccine = () => {
   const [vaccines, setVaccines] = useState([]);
+  const [history, setHistory] = useState([]);
+
   const [listOfDisplayedVaccines, setListOfDisplayedVaccines] = useState([]);
   const [query, setQuery] = useState("");
   const [selectedVaccine, setSelectedVaccine] = useState(null);
@@ -61,13 +64,7 @@ const ApplyVaccine = () => {
   const [invalidCode, setInvalidCode] = useState(true);
   const [progress, setProgess] = useState(0);
   const [loading, setLoading] = useState(true);
-
-  const history = [
-    { patient: "027.780.782-40", date: "24/07/2021 08:46:16" },
-    { patient: "505.665.318-79", date: "05/08/2020 08:46:16" },
-    { patient: "621.876.737-07", date: "03/08/2021 08:46:16" },
-    { patient: "802.080.869-86", date: "04/09/2021 08:46:16" }
-  ];
+  const [historyLoading, setHistoryLoading] = useState(true);
 
   let secondsSpent = 0;
   let interval;
@@ -79,6 +76,16 @@ const ApplyVaccine = () => {
     setCode(null);
     setInvalidCode(true);
   }, [selectedVaccine]);
+
+  useEffect(() => {
+    const fetch = async () => {
+      setHistoryLoading(true);
+      setHistory((await HistoryService.getAll()) || []);
+      setHistoryLoading(false);
+    };
+    fetch();
+    return () => {};
+  }, []);
 
   useEffect(() => {
     clearInterval(interval);
@@ -419,35 +426,60 @@ const ApplyVaccine = () => {
               </button>
             </li>
             <li className="nav-text">Histórico</li>
+
             <li>
-              {history.map(d => (
-                <div className="activee" href="#">
-                  <strong>{d.patient}</strong>
-                  <br />
-                  <span style={{ fontSize: "12px" }}>{d.date}</span>
+              {history.slice(0, 5).map(h => (
+                <div className="d-flex align-itens-start" href="#">
+                  <span className="d-flex align-items-start mt-2 mr-0 pr-0">
+                    <strong
+                      style={{
+                        color: "#fff",
+                        fontSize: "24px"
+                      }}
+                    >
+                      {`${h.patient.firstName[0]}${
+                        h.patient.lastName[0]
+                      }`.toUpperCase()}
+                    </strong>
+                  </span>
+                  <div className="ml-0">
+                    <span style={{ fontSize: "12px" }}>
+                      {new Date(h.createAt).toLocaleDateString()}
+                    </span>
+
+                    <div
+                      style={{ fontSize: "9px", marginTop: "-3px", padding: 0 }}
+                    >
+                      {new Date(h.createAt).toLocaleTimeString()}
+                      <br />
+                      {`T${h.transactionId.split(",")[0]}#${h.patient.id}`}
+                    </div>
+                  </div>
                 </div>
               ))}
             </li>
             <li>
-              <p
-                className="mx-2 mt-3 mb-0 text-muted text-uppercase mb-1"
-                style={{ fontSize: "12px" }}
-              >
-                Mais{" "}
-                <strong className="mx-1" style={{ color: "#fff" }}>
-                  {" "}
-                  7.812{" "}
-                </strong>{" "}
-                registros
-              </p>
+              {historyLoading && <Loader />}
+              {!historyLoading && (
+                <p
+                  className="mx-2 mt-3 mb-0 text-muted text-uppercase mb-1"
+                  style={{ fontSize: "12px" }}
+                >
+                  <strong className="mx-1" style={{ color: "#fff" }}>
+                    {history.length}{" "}
+                  </strong>{" "}
+                  registros
+                </p>
+              )}
             </li>
             <li>
-              <div
+              <Link
+                to="/history"
                 className="btn-outline-light btn-sm mx-2 mt-0 mb-0"
                 style={{ textAlign: "center", border: ".5px solid #fff" }}
               >
                 Mostrar mais
-              </div>
+              </Link>
             </li>
             <li>
               <div className="divider mt-3 ml-0 pl-1 mr-2 mb-2" />
@@ -466,6 +498,21 @@ const ApplyVaccine = () => {
                 to="/campaign"
               >
                 Ver Campanhas
+              </Link>
+            </li>
+            <li>
+              <div href="#" />
+              <Link
+                className="btn-light btn-sm mx-2 mt-0 mb-0"
+                style={{
+                  textAlign: "center",
+                  border: "2px solid #fff",
+                  color: "#000",
+                  fontWeight: "bolder"
+                }}
+                to="/history"
+              >
+                Ver Históricos
               </Link>
             </li>
           </ul>

@@ -9,14 +9,14 @@ export const Load = styled.div`
   border: 2px solid #a3a3a3; /* Light grey */
   border-top: 2px solid #fff; /* Blue */
   border-radius: 40px;
-  width: 25px;
-  height: 25px;
+  width: 34px;
+  height: 34px;
   animation: ${spin} 0.4s linear infinite;
 `;
 
 export const Container = styled.div`
-  min-width: 30px;
-  min-height: 30px;
+  width: 40px;
+  height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;

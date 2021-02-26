@@ -583,7 +583,7 @@ ul {
 
 .tooltip-area {
   position: relative;
-  display: inline-block;
+  overflow: visible;
 }
 
 .tooltip-area .tooltip-text {

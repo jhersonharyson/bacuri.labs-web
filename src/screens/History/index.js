@@ -109,7 +109,7 @@ const History = () => {
                     ? h.professional.id == UserService.getUser().id
                     : true) &&
                   (filter == "RANGE"
-                    ? new Date(h.createAt).toLowerCase()?.includes(range)
+                    ? new Date(h.createAt)?.toLowerCase()?.includes(range)
                     : true)
               )
           );
@@ -187,8 +187,8 @@ const History = () => {
               style={{ color: "#fff" }}
             >
               <img
-                url={history.campaign.image}
-                style={{ width: "100%", height: "60px" }}
+                src={history.campaign.image}
+                style={{ width: "100%", objectFit: "contain" }}
               />
               <strong>Campanha</strong> {history.campaign.title} <br />
               <strong>Descrição</strong> {history.campaign.description}
@@ -488,37 +488,52 @@ const History = () => {
             </button>
           </div>
           <ul>
-            <li className="nav-text">Histórico</li>
+            <li className="nav-text">Recentes</li>
             <li>
-              {history.map(h => (
-                <div className="activee" href="#">
-                  <strong>
-                    {`${h.patient.firstName[0]}${
-                      h.patient.lastName[0]
-                    }`.toUpperCase()}
-                  </strong>
-                  <br />
-                  <span style={{ fontSize: "12px" }}>
-                    {new Date(h.createAt).toLocaleDateString()}{" "}
-                    {new Date(h.createAt).toLocaleTimeString()}
+              {history.slice(0, 5).map(h => (
+                <div className="d-flex align-itens-start" href="#">
+                  <span className="d-flex align-items-start mt-2 mr-0 pr-0">
+                    <strong
+                      style={{
+                        color: "#fff",
+                        fontSize: "24px"
+                      }}
+                    >
+                      {`${h.patient.firstName[0]}${
+                        h.patient.lastName[0]
+                      }`.toUpperCase()}
+                    </strong>
                   </span>
-                  <br />
-                  <span style={{ fontSize: "9px" }}>
-                    {`T${h.transactionId.split(",")[0]}#${h.patient.id}`}
-                  </span>
+                  <div className="ml-0">
+                    <span style={{ fontSize: "12px" }}>
+                      {new Date(h.createAt).toLocaleDateString()}
+                    </span>
+
+                    <div
+                      style={{ fontSize: "9px", marginTop: "-3px", padding: 0 }}
+                    >
+                      {new Date(h.createAt).toLocaleTimeString()}
+                      <br />
+                      {`T${h.transactionId.split(",")[0]}#${h.patient.id}`}
+                    </div>
+                  </div>
                 </div>
               ))}
             </li>
             <li>
-              <p
-                className="mx-2 mt-3 mb-0 text-muted text-uppercase mb-1"
-                style={{ fontSize: "12px" }}
-              >
-                <strong className="mx-1" style={{ color: "#fff" }}>
-                  {history.length}{" "}
-                </strong>{" "}
-                registros
-              </p>
+              {loading && <Loader />}
+
+              {!loading && (
+                <p
+                  className="mx-2 mt-3 mb-0 text-muted text-uppercase mb-1"
+                  style={{ fontSize: "12px" }}
+                >
+                  <strong className="mx-1" style={{ color: "#fff" }}>
+                    {history.length}{" "}
+                  </strong>{" "}
+                  registros
+                </p>
+              )}
             </li>
             <li>
               <div className="divider mt-3 ml-0 pl-1 mr-2 mb-2" />
@@ -537,6 +552,21 @@ const History = () => {
                 to="/campaign"
               >
                 Ver Campanhas
+              </Link>
+            </li>
+            <li>
+              <div href="#" />
+              <Link
+                className="btn-light btn-sm mx-2 mt-0 mb-0"
+                style={{
+                  textAlign: "center",
+                  border: "2px solid #fff",
+                  color: "#000",
+                  fontWeight: "bolder"
+                }}
+                to="/apply"
+              >
+                Ver Vacinas
               </Link>
             </li>
           </ul>
